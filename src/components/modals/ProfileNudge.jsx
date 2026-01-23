@@ -38,7 +38,7 @@ export default function ProfileNudge({ show, onClose, onUpdateNow, onSkip }) {
   }, [show, onClose]);
 
   if (!show) return null;
-
+ 
   return (
     <div className="qm-backdrop" role="dialog" aria-modal="true" aria-labelledby="pn-title">
       <div className="qm-card" style={{ maxWidth: 520 }} ref={cardRef} tabIndex={-1}>

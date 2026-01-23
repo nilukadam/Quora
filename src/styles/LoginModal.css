@@ -1,87 +1,45 @@
-/* FILE: src/styles/LoginModal.css */
-/* Modern, theme-aware Login Modal */
-/* Works in both light/dark via Bootstrap's CSS variables */
+/* ===========================
+   Login Modal
+   =========================== */
 
-/* ============================
-   Backdrop
-   ============================ */
+/* Backdrop — no blur, no animation */
 .lm-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-
-  /* smooth fade */
-  opacity: 1;
-  animation: lm-fade 0.25s ease;
 }
-
-@keyframes lm-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-
-/* ============================
-   Card
-   ============================ */
+ 
+/* Card */
 .lm-card {
   width: 100%;
   max-width: 450px;
-
-  background: var(--bs-body-bg);
+  background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-
   border-radius: 12px;
   border: 1px solid var(--bs-border-color);
-
   padding: 20px 22px;
   position: relative;
-
-  /* soft shadow */
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-
-  /* scale animation */
-  animation: lm-pop 0.22s ease-out;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.14); /* softened */
 }
 
-@keyframes lm-pop {
-  from { transform: scale(0.92); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-
-
-/* ============================
-   Close Button
-   ============================ */
+/* Close button */
 .lm-close {
   position: absolute;
-  right: 12px;
   top: 10px;
-
+  right: 12px;
   border: none;
   background: transparent;
   color: var(--bs-body-color);
-
   font-size: 22px;
   cursor: pointer;
-  padding: 2px;
-  line-height: 1;
   border-radius: 6px;
 }
 
-.lm-close:hover {
-  background: var(--bs-secondary-bg);
-}
-
-
-/* ============================
-   Tabs
-   ============================ */
+/* Tabs */
 .lm-tabs {
   display: flex;
   gap: 8px;
@@ -92,31 +50,21 @@
   flex: 1;
   padding: 9px 12px;
   border-radius: 8px;
-
-  background: var(--bs-secondary-bg);
+  background-color: var(--bs-secondary-bg);
   border: 1px solid var(--bs-border-color);
   color: var(--bs-body-color);
-
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.lm-tab:hover {
-  background: var(--bs-tertiary-bg);
 }
 
 .lm-tab.active {
-  background: var(--bs-primary-bg-subtle);
+  background-color: var(--bs-primary-bg-subtle);
   border-color: var(--bs-primary-border-subtle);
   color: var(--bs-primary-text-emphasis);
   font-weight: 600;
 }
 
-
-/* ============================
-   Forms
-   ============================ */
+/* Form */
 .lm-form {
   display: flex;
   flex-direction: column;
@@ -126,52 +74,36 @@
 .lm-label {
   display: flex;
   flex-direction: column;
+  gap: 6px;
   font-size: 13px;
   font-weight: 500;
-  gap: 6px;
 }
 
-/* Input fields */
+/* Inputs — no glow */
 .lm-input {
   padding: 10px 12px;
   border-radius: 8px;
-
-  background: var(--bs-body-bg);
+  background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-
   border: 1px solid var(--bs-border-color);
-  outline: none;
   font-size: 14px;
-
-  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
 }
 
 .lm-input:focus {
-  border-color: var(--bs-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+  border-color: var(--bs-border-color);
 }
 
-
-/* ============================
-   Submit Button
-   ============================ */
+/* Primary button */
 .lm-primary {
   margin-top: 4px;
   padding: 10px 12px;
-
-  border: none;
   border-radius: 8px;
-
-  background: var(--bs-primary);
+  border: none;
+  background-color: var(--bs-primary);
   color: #fff;
   font-weight: 600;
-
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.lm-primary:hover {
-  background: #4f46e5;   /* darker indigo */
 }
 
 .lm-primary[disabled] {
@@ -179,34 +111,17 @@
   cursor: not-allowed;
 }
 
-
-/* ============================
-   Error
-   ============================ */
+/* Error — no animation */
 .lm-error {
-  background: #fff3f2;
+  background-color: #fff3f2;
   border: 1px solid #ffd6d4;
-
   color: #b00020;
   padding: 8px 10px;
   border-radius: 8px;
   font-size: 13px;
-
-  animation: lm-shake 0.25s ease;
 }
 
-@keyframes lm-shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  50% { transform: translateX(3px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
-}
-
-
-/* ============================
-   Mobile
-   ============================ */
+/* Mobile */
 @media (max-width: 480px) {
   .lm-card {
     width: 92%;

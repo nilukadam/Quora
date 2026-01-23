@@ -15,7 +15,7 @@ export default function NotificationItem({ item, onMarkRead, onDismiss }) {
   return (
     <div
       className={`d-flex align-items-start justify-content-between p-3 mb-2 border rounded ${
-        isUnread ? "bg-light" : "bg-white"
+        isUnread ? "bg-light" : "bg-white" 
       }`}
       role="listitem"
       aria-live="polite"
@@ -24,7 +24,7 @@ export default function NotificationItem({ item, onMarkRead, onDismiss }) {
         <div className="fw-medium">{text || "Notification"}</div>
         <div className="text-muted small">{when}</div>
       </div>
-
+ 
       <div className="ms-3 d-flex align-items-center">
         <button
           className="btn btn-sm btn-outline-secondary me-2"

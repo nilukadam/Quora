@@ -59,3 +59,4 @@ export default function AuthRequiredPopup({ show, onClose, onOpenLogin }) {
     </div>
   );
 }
+ 

@@ -14,13 +14,13 @@ import { useFeed } from "../../hooks/useFeed";
 import { FaUserMinus, FaUserPlus, FaSearch } from "react-icons/fa";
 import "../../styles/Following.css";
 
-export default function FollowingPage() {
+export default function FollowingPage() { 
   const { following = [] } = useFeed();
   const [search, setSearch] = useState("");
   const [followed, setFollowed] = useState({});
 
   /** Set initial follow mapping on mount */
-  useEffect(() => {
+  useEffect(() => { 
     const map = {};
     following.forEach((u) => (map[u.id] = true));
     setFollowed(map);
@@ -46,7 +46,7 @@ export default function FollowingPage() {
       
       {/* ================= HEADER ================= */}
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-        <h4 className="m-0">Following</h4>
+        <h3 className="m-0 following-title">Following</h3>
 
         {/* Search box */}
         <div className="position-relative" style={{ maxWidth: 280 }}>
@@ -62,7 +62,7 @@ export default function FollowingPage() {
           <input
             type="search"
             className="form-control ps-4"
-            placeholder="Search people..."
+            placeholder="Search people you follow"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search following list"
@@ -72,7 +72,9 @@ export default function FollowingPage() {
 
       {/* ================= EMPTY STATE ================= */}
       {filtered.length === 0 && (
-        <div className="alert alert-info">No people found.</div>
+        <div className="following-empty text-muted">
+          No people match your search.
+        </div>
       )}
 
       {/* ================= FOLLOWING GRID ================= */}

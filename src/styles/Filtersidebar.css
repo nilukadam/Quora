@@ -1,155 +1,159 @@
-/* FILE: src/styles/FilterSidebar.css
-   FilterSidebar styles — consolidated and theme-friendly
-   - Outer container is sticky; inner list scrolls independently
-   - Uses Bootstrap CSS variables for dark/light compatibility
-   - Preserves responsive adjustments
-*/
+/* ===========================
+   Filter Sidebar
+   =========================== */
 
 /* Outer sidebar container (sticky) */
 .filter-sidebar {
   position: sticky;
-  top: 76px; /* keep in sync with navbar height (App inlines 76) */
+  top: 76px;
   display: flex;
   flex-direction: column;
-  min-height: 0; /* allow children to control height */
-  background: var(--bs-card-bg);
+  min-height: 0;
+  background-color: var(--bs-card-bg);
   color: var(--bs-body-color);
   border: 1px solid var(--bs-border-color);
   border-radius: 10px;
-  overflow: hidden; /* keep header & actions visible; list scrolls */
+  overflow: hidden;
 }
 
-/* Header area (fixed, non-scrolling) */
+/* Header */
 .fs-header {
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 12px 14px;
   border-bottom: 1px solid var(--bs-border-color);
-  background: transparent;
 }
+
 .fs-header h6 {
   margin: 0;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600; /* calmer than 700 */
 }
 
-/* Optional top info area */
+/* Optional top info */
 .fs-top {
-  flex: 0 0 auto;
   padding: 10px 12px;
   border-bottom: 1px solid var(--bs-border-color);
-  background: transparent;
 }
-.fs-info { line-height: 1.2; }
-.fs-link { text-decoration: none; font-size: 13px; }
-.fs-link:hover { text-decoration: underline; }
 
-/* ============================
-   Scroll area — ONLY this part scrolls
-   ============================ */
+.fs-info {
+  line-height: 1.2;
+}
+
+.fs-link {
+  font-size: 13px;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollable list */
 .fs-list {
   flex: 1 1 auto;
-  min-height: 0; /* critical to allow inner scrolling */
+  min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden;
   padding: 10px 12px;
-  background: transparent;
 }
 
 /* Space items */
-.spaces-list { list-style: none; margin: 0; padding: 0; }
+.spaces-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .space-item {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  padding: 8px 0;
+  padding: 6px 0;
   border-radius: 8px;
-  transition: background 160ms ease;
 }
+
+/* Reduced hover emphasis */
 .space-item:hover,
 .space-item:focus-within {
-  background: rgba(0,0,0,0.03);
-  cursor: pointer;
+  background-color: rgba(0,0,0,0.02);
 }
 
-/* clickable area for space (uses button or anchor in markup) */
 .space-link {
+  display: block;
+  flex: 1;
+  padding: 4px 6px;
   color: inherit;
   text-decoration: none;
-  flex: 1;
-  display: block;
-  padding: 4px 6px;
 }
-.space-link:focus { outline: none; }
 
-/* color square */
+/* Color indicator */
 .space-color {
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  border: 1px solid rgba(0,0,0,0.06);
-  flex: 0 0 22px;
+  border: 1px solid var(--bs-border-color);
+  flex-shrink: 0;
 }
 
-/* title & desc */
+/* Text */
 .space-name {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.1;
 }
+
 .space-desc {
   font-size: 12px;
   color: var(--bs-muted, #6c757d);
   line-height: 1.2;
 }
 
-/* followers badge */
+/* Followers badge — visually quieter */
 .followers-badge {
-  background: var(--bs-secondary-bg, #f1f5f9);
-  color: var(--bs-body-color);
-  border-radius: 999px;
-  padding: 4px 8px;
+  background-color: var(--bs-secondary-bg, #f1f3f5);
+  color: var(--bs-muted, #6c757d);
   font-size: 0.8rem;
-  font-weight: 600;
-  white-space: nowrap;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 999px;
 }
 
-/* Action area (Create Space) - pinned below the list */
+/* Actions */
 .fs-actions {
-  flex: 0 0 auto;
-  border-top: 1px solid var(--bs-border-color);
   padding: 10px 12px;
-  background: transparent;
+  border-top: 1px solid var(--bs-border-color);
 }
+
 .fs-actions .btn {
   width: 100%;
   border-radius: 6px;
 }
 
-/* subtle separators */
+/* Subtle divider */
 .filter-sidebar hr {
   margin: 8px 0;
   border: none;
   border-top: 1px solid var(--bs-border-color);
 }
 
-/* Scrollbar styling (Chromium) */
-.fs-list::-webkit-scrollbar { width: 6px; }
+/* Scrollbar — softened */
+.fs-list::-webkit-scrollbar {
+  width: 6px;
+}
+
 .fs-list::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.12);
+  background-color: rgba(0,0,0,0.1);
   border-radius: 4px;
 }
-.fs-list::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
 
-/* Firefox thin scrollbar */
-.fs-list { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.12) transparent; }
+/* Firefox */
+.fs-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.1) transparent;
+}
 
-/* Responsive adjustments */
+/* Responsive (unchanged behavior) */
 @media (max-width: 991px) {
   .space-desc { display: none; }
   .space-name { font-size: 0.92rem; }
-  .filter-sidebar { display: none; } /* follow existing layout hide on smaller screens */
+  .filter-sidebar { display: none; }
 }

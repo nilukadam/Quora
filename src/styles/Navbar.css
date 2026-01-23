@@ -1,61 +1,53 @@
-/* FILE: src/styles/Navbar.css */
+/* ===========================
+   Navbar container
+   =========================== */
 
-/* === Navbar container === */
 .qc-navbar {
   height: 70px;
   font-size: 15px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  z-index: 1050; /* sits above content */
-}
-
-/* Use Bootstrap CSS variables so dark/light just works */
-.qc-navbar {
-  background: var(--bs-body-bg) !important;
-  color: var(--bs-body-color) !important;
+  z-index: 1050;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
   border-bottom: 1px solid var(--bs-border-color);
-}
-.qc-link {
-  color: var(--bs-body-color);
-}
-.qc-search,
-.qc-suggestions {
-  background: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  border-color: var(--bs-border-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); /* softened */
 }
 
+/* ===========================
+   Logo (brand stays primary)
+   =========================== */
 
-.qc-logo  {
-  font-size: 1.8rem !important;
+.qc-logo {
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #eb3749 !important; /* Quora red */
+  color: #eb3749;
   margin-top: 4px;
   cursor: pointer;
-  border: none;
   background: transparent;
+  border: none;
 }
 
 .qc-logo:hover {
-  color: #810e2ace !important;
+  color: #810e2ace;
 }
 
-/* === Nav links === */
-.qc-links .qc-link{
+/* ===========================
+   Navigation links
+   =========================== */
+
+.qc-links .qc-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 20px !important;
+  padding: 20px 20px;
   border-radius: 6px;
   font-size: 22px;
-  color: #444;
+  color: #495057; /* calmer than pure dark */
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .qc-link:hover {
   color: #d62839;
-  background: #f5f5f5;
-  border-bottom: 2px solid #d62839;
-  transition: all 0.2s ease;
+  background-color: #f5f5f5;
 }
 
 .qc-link.active {
@@ -63,7 +55,10 @@
   border-bottom: 2px solid #d62839;
 }
 
-/* === Search === */
+/* ===========================
+   Search
+   =========================== */
+
 .qc-search-wrapper {
   display: flex;
   align-items: center;
@@ -72,44 +67,46 @@
 }
 
 .qc-search {
-  padding: 7px 36px 7px 28px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
   width: 260px;
+  padding: 7px 36px 7px 28px;
   font-size: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 6px;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border: 1px solid var(--bs-border-color);
 }
 
 .qc-search:focus {
   outline: none;
   border-color: #d62839;
-  box-shadow: 0 0 0 2px rgba(214, 40, 57, 0.2);
+  box-shadow: 0 0 0 2px rgba(214, 40, 57, 0.15);
 }
 
 .qc-search-icon {
   position: absolute;
   left: 8px;
-  color: #888;
   font-size: 16px;
+  color: #adb5bd; /* muted icon */
 }
 
 .qc-search-btn {
   margin-left: 8px;
   padding: 6px 12px;
+  font-size: 14px;
   border-radius: 6px;
   background-color: #d62839;
-  color: white;
+  color: #fff;
   border: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 .qc-search-btn:hover {
   background-color: #a61c2d;
 }
 
-/* === Suggestions dropdown === */
+/* ===========================
+   Search suggestions
+   =========================== */
+
 .qc-suggestions {
   position: absolute;
   top: 100%;
@@ -117,73 +114,59 @@
   right: 0;
   max-height: 260px;
   overflow-y: auto;
-  background: white;
-  border: 1px solid #ccc;
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
   border-radius: 6px;
-  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* softened */
   z-index: 2000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .qc-suggestion-item {
   padding: 8px 12px;
-  cursor: pointer;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .qc-suggestion-item:hover {
   background-color: #f7f7f7;
 }
 
-/* === Add Question button === */
+/* ===========================
+   Add Question button
+   =========================== */
+
 .qc-add-btn {
-  font-weight: 500;
+  margin-left: 12px;
   font-size: 14px;
+  font-weight: 500;
   padding: 6px 12px;
   border-radius: 6px;
-  transition: all 0.2s ease;
-  margin-left: 12px;
 }
 
-.qc-add-btn:hover {
-  background-color: #d62839;
-  color: white;
-}
+/* ===========================
+   Profile
+   =========================== */
 
-/* === Profile === */
 .qc-profile-wrapper {
   position: relative;
   z-index: 1050;
 }
 
 .qc-profile-btn {
-  display: inline-block;
   width: 36px;
   height: 36px;
   padding: 0;
-  line-height: 0;
   border-radius: 50%;
-  overflow: hidden;
-  vertical-align: middle;
   background: transparent;
 }
 
-/* the actual img element */
 .qc-profile {
-  display: block;             /* avoid inline spacing issues */
-  width: 36px !important;     /* explicit size to match layout */
-  height: 36px !important;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: var(--bs-card-bg, #f1f3f5);  /* visible neutral bg if svg transparent */
-  border: 1px solid var(--bs-border-color, rgba(0,0,0,0.06));
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.02) inset;
-  opacity: 1 !important;
-}
-
-
-.qc-profile:hover {
-  border-color: #d62839;
+  background-color: var(--bs-card-bg, #f1f3f5);
+  border: 1px solid var(--bs-border-color);
 }
 
 .qc-profile-dropdown {
@@ -191,34 +174,33 @@
   top: 110%;
   right: 0;
   margin-top: 6px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 2000;
   min-width: 160px;
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 2000;
 }
 
 .qc-profile-dropdown div {
   padding: 10px 16px;
-  cursor: pointer;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .qc-profile-dropdown div:hover {
   background-color: #f5f5f5;
 }
 
+/* ===========================
+   Scrollbar (subtle)
+   =========================== */
 
-
-/* Chrome/Edge scrollbar */
 .qc-suggestions::-webkit-scrollbar {
   width: 6px;
 }
+
 .qc-suggestions::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background-color: #d1d5db;
   border-radius: 4px;
-}
-.qc-suggestions::-webkit-scrollbar-thumb:hover {
-  background: #aeb4bd;
 }

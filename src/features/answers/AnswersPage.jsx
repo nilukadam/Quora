@@ -66,14 +66,14 @@ export default function AnswersPage() {
   }, [posts, q]);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 answers-page">
       {/* Header */}
-      <h4 className="mb-3">
+      <h3 className="mb-3 answers-title">
         {q ? `Results for “${q}”` : "All answers"}
-      </h4>
+      </h3>
 
       {/* Summary */}
-      <div className="mb-3 text-muted small">
+      <div className="mb-3 results-count">
         {q
           ? `${results.length} result${results.length !== 1 ? "s" : ""} found`
           : `${results.length} post${results.length !== 1 ? "s" : ""} — newest first`
@@ -82,11 +82,11 @@ export default function AnswersPage() {
 
       {/* No results */}
       {results.length === 0 ? (
-        <div className="alert alert-info">
+        <div className="answers-empty">
           {q ? (
             <>
-              No results matched <strong>“{q}”</strong>.  
-              Try different keywords or remove filters.
+              No results matched “{q}”.  
+              Try a different keyword or clear the search.
             </>
           ) : (
             "No posts yet. Be the first to ask or post!"
@@ -103,3 +103,4 @@ export default function AnswersPage() {
     </div>
   );
 }
+ 

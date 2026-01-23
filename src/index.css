@@ -1,22 +1,25 @@
+/* Base reset */
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
 }
-/* Global theme-aware surfaces */
-html, body {
-  background-color: var(--bs-body-bg) !important;
-  color: var(--bs-body-color) !important;
+
+/* Theme-aware global surfaces */
+html,
+body {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
-/* If you had a light panel behind the app, switch it to variables */
+/* App-level containers follow theme background */
 .app-main,
 .homepage-container {
-  background: var(--bs-body-bg) !important;
+  background-color: var(--bs-body-bg);
 }
 
-/* Optional: default card look that adapts to theme */
+/* Calm default card appearance (Bootstrap-safe) */
 .card {
-  background: var(--bs-body-bg);
+  background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-  border: 1px solid var(--bs-border-color);
+  border-color: var(--bs-border-color);
 }

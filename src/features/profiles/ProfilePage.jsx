@@ -75,12 +75,12 @@ export default function ProfilePage() {
           />
 
           <div className="flex-grow-1 min-w-0">
-            <h2 id="profile-heading" className="mb-1">
+            <h2 id="profile-heading" className="mb-1 profile-name">
               {profile?.name || "Your name"}
             </h2>
-            <div className="text-muted mb-2">{profile?.email || "—"}</div>
+            <div className="profile-email">{profile?.email || "—"}</div>
 
-            <p className="mb-1 text-muted">
+            <p className="profile-bio">
               {profile?.bio || "Add a short bio so others know who you are."}
             </p>
             {profile?.location && (
@@ -103,12 +103,20 @@ export default function ProfilePage() {
       {/* POSTS LIST */}
       <section className="profile-posts">
         <div className="d-flex align-items-center justify-content-between mb-3">
-          <h4 className="m-0">Your Posts <span className="text-muted small">({myPosts.length})</span></h4>
+          <h4 className="m-0 profile-posts-title">
+            Your Posts <span className="profile-posts-count">({myPosts.length})</span>
+          </h4>
         </div>
 
         {myPosts.length === 0 ? (
-          <div className="alert alert-info">You haven't published any posts yet. Try creating a question or a post.</div>
-        ) : (
+          <div className="profile-empty">
+            You haven't published any posts yet.
+            <div className="profile-empty-hint">
+            Try asking a question or sharing something you know.
+            </div>
+          </div>
+
+        ) : ( 
           myPosts.map((post) => <AnswerPostCard key={post.id || post._id} post={post} />)
         )}
       </section>
@@ -130,3 +138,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+ 

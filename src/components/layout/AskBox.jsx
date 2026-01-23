@@ -12,7 +12,7 @@ import "../../styles/AskBox.css";
  * - Delegates auth gating to App via provided handlers or legacy events
  *
  * Props (optional):
- *  - onAskClick?: () => void
+ *  - onAskClick?: () => void 
  *  - onTryPost?: () => void
  *  - onProfileClick?: () => void
  *
@@ -79,10 +79,10 @@ export default function AskBox({ onAskClick, onTryPost, onProfileClick } = {}) {
         <button
           className="askbox-input btn btn-light text-start flex-grow-1"
           onClick={openQuestion}
-          aria-label="Have a question or something to share? Open editor"
+          aria-label="Aak a question or share something useful. Open editor"
           type="button"
         >
-          Have a question or something to share?
+          Ask a question or share something useful
         </button>
 
         <div className="askbox-actions d-flex gap-2 ms-3">
@@ -109,7 +109,7 @@ export default function AskBox({ onAskClick, onTryPost, onProfileClick } = {}) {
       </div>
 
       <div className="askbox-helper small text-muted mt-2" aria-hidden="false">
-        Tip: Click the input to open the editor. Search is available at the top.
+        Tip: Click above to ask a question or write a short post.
       </div>
     </div>
   );

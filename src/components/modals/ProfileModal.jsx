@@ -51,7 +51,7 @@ export default function ProfileModal({
     document.body.style.overflow = "hidden";
 
     setMode(editMode ? "edit" : "view");
-    setError("");
+    setError(""); 
     setSaving(false);
     setProfile({
       name: initialProfile.name || "",

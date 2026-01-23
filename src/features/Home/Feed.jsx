@@ -111,7 +111,7 @@ export default function Feed({ onTryPost, onCreateSpace, onProfileClick } = {}) 
       {/* Load indicator or spacer */}
       {hasMore ? (
         <div className="text-center text-muted py-3" aria-live="polite">
-          Loading more…
+          Loading more posts…
         </div>
       ) : (
         <div style={{ height: 24 }} aria-hidden="true" />

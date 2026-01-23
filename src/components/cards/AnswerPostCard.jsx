@@ -87,9 +87,15 @@ export default function AnswerPostCard({ post }) {
   }, [createdAt]);
 
   // Content length check for "read more"
-  const plainLen = (content || "").replace(/\n+/g, " ").length;
-  const showReadMore = plainLen > 200;
-
+  const safeContent =
+  typeof content === "string"
+    ? content
+    : Array.isArray(content)
+    ? content.join(" ")
+    : typeof content === "object"
+    ? JSON.stringify(content)
+    : String(content ?? "");
+  const plainLen = safeContent.replace(/\n+/g, " ").length;
   const handleFollowToggle = () => {
     if (!canFollow) {
       toast("Cannot follow this author");
@@ -184,31 +190,33 @@ export default function AnswerPostCard({ post }) {
           {followed ? "Following" : "Follow"}
         </button>
       </header>
-
+ 
       {/* Body */}
       <section className="post-body mt-2" style={{ fontFamily: font }}>
         {type === "question" && title && <h5 className="fw-semibold mb-2">{title}</h5>}
 
         {!!content && (
-          <>
-            <p className={`post-content ${expanded ? "expanded" : "collapsed"}`} aria-live="polite">
-              {expanded ? content : content.slice(0, 200)}
-              {showReadMore && !expanded && "…"}
-            </p>
-
-            {showReadMore && (
-              <button
-                className="btn btn-link btn-sm p-0"
-                onClick={() => setExpanded((s) => !s)}
-                aria-expanded={expanded}
-                aria-controls={`post-content-${postId}`}
+          <div className="post-text">
+            <div className="post-text-inner">
+             <p
+               className={`post-content ${plainLen > 50 && !expanded ? "collapsed" : "expanded"}`}
+               aria-live="polite"
               >
-                {expanded ? "Show less" : "Read more"}
-              </button>
-            )}
-          </>
-        )}
+                {safeContent} 
+              </p>
 
+              {plainLen > 50 && (
+                 <button
+                    className="post-readmore"
+                    onClick={() => setExpanded(s => !s)}
+                 >
+                    {expanded ? "Show less" : "Read more"}
+                 </button>
+                )}
+              </div>
+           </div>
+          )}
+          
         {image && (
           <div className="mt-3">
             <img

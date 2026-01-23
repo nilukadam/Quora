@@ -104,8 +104,12 @@ export default function SpacesPage() {
     <div className="container mt-4 spaces-page">
       <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-3">
         <div>
-          <h3 className="mb-1">Spaces {topic ? <small className="text-muted">· {topic}</small> : null}</h3>
-          <div className="text-muted small">Discover communities focused on specific topics.</div>
+          <h3 className="mb-1 spaces-title">
+            Spaces {topic ? <span className="space-topic">· {topic}</span> : null}
+          </h3>
+          <div className="space-intro text-muted">
+            Discover communities focused on specific topics.
+          </div>
         </div>
 
         <div className="d-flex gap-2 align-items-center w-100 w-md-auto">
@@ -114,7 +118,7 @@ export default function SpacesPage() {
             <input
               type="search"
               className="form-control spaces-search-input"
-              placeholder="Search spaces by name or description"
+              placeholder="Search spaces"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               aria-label="Search spaces"
@@ -127,7 +131,7 @@ export default function SpacesPage() {
             aria-label="Create space"
             title="Create a new space"
           >
-            + Create Space
+            + Create Space 
           </button>
         </div>
       </div>
@@ -135,7 +139,9 @@ export default function SpacesPage() {
       <div className="row g-3">
         {ordered.length === 0 ? (
           <div className="col-12">
-            <div className="alert alert-info mb-0">No spaces found.</div>
+            <div className="spaces-empty text-muted mb-0">
+              No spaces match your search.
+            </div>
           </div>
         ) : (
           ordered.map((s) => (

@@ -10,7 +10,7 @@ export default function NotificationsPage() {
     notifications,
     markNotificationRead,
     dismissNotification,
-    markAllNotificationsRead,
+    markAllNotificationsRead, 
   } = useFeed();
 
   const [filter, setFilter] = useState("all");
@@ -40,13 +40,13 @@ export default function NotificationsPage() {
   const handleDismiss = (id) => { if (dismissNotification?.(id)) toast("Dismissed"); };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 notifications-page">
       {/* Header */}
       <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-        <h4 className="m-0 d-flex align-items-center gap-2">
+        <h4 className="m-0 d-flex align-items-center gap-2 notifications-title">
           <FaRegBell /> Notifications
         </h4>
-        <div className="text-muted small">
+        <div className="notifications-meta">
           {unreadCount > 0 ? `${unreadCount} unread` : "All caught up 🎉"}
         </div>
       </div>
@@ -71,7 +71,9 @@ export default function NotificationsPage() {
 
       {/* List */}
       {filtered.length === 0 ? (
-        <div className="alert alert-info">No notifications found for this filter.</div>
+        <div className="notifications-empty">
+          No notifications found for this filter.
+        </div>
       ) : (
         <ul className="list-unstyled">
           {filtered.map((n) => {
@@ -85,7 +87,7 @@ export default function NotificationsPage() {
                 key={n.id}
                 className={`notification-item p-3 mb-2 rounded shadow-sm position-relative ${isUnread ? "unread" : ""}`}
               >
-                {/* 🔴 unread badge */}
+                {/*  unread badge */}
                 {isUnread && <span className="notif-dot" aria-hidden="true"></span>}
 
                 <div className="d-flex align-items-start justify-content-between">
