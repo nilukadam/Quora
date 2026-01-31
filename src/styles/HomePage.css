@@ -52,7 +52,6 @@
   border-radius: 10px;
   background-color: var(--bs-card-bg);
   padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04); /* softened */
   font-size: 12px;
   line-height: 1.45;
 }
@@ -77,6 +76,12 @@
   text-decoration: none;
   font-size: 12.5px;
   line-height: 1.4;
+  cursor: pointer;
+}
+.sidebar-footer-links a:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .sidebar-footer-links a:hover {
@@ -117,9 +122,4 @@
   .homepage-sidebar {
     display: none;
   }
-}
-
-/* Accessibility */
-.homepage-sidebar .spaces-scroll:focus {
-  outline: none;
 }

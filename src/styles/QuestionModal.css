@@ -28,7 +28,7 @@
   position: relative;
   max-height: 90vh;
   overflow: hidden;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Close button */
@@ -43,6 +43,16 @@
   cursor: pointer;
   border-radius: 6px;
 }
+.qm-close:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.qm-close:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+.qm-close:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
 
 /* Tabs */
 .qm-tabs {
@@ -50,7 +60,6 @@
   gap: 8px;
   margin-bottom: 6px;
 }
-
 .qm-tab {
   padding: 8px 12px;
   border-radius: 8px;
@@ -60,13 +69,20 @@
   font-size: 14px;
   cursor: pointer;
 }
-
 .qm-tab.active {
   background-color: var(--bs-primary-bg-subtle);
   border-color: var(--bs-primary-border-subtle);
   color: var(--bs-primary-text-emphasis);
   font-weight: 600;
 }
+.qm-tab:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.qm-tab:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+
 
 /* Body (scroll area) */
 .qm-body {
@@ -98,17 +114,26 @@
   font-size: 14px;
   outline: none;
 }
-
-.qm-input:focus,
-.qm-textarea:focus {
-  border-color: var(--bs-border-color);
-}
-
 .qm-textarea {
   resize: vertical;
   min-height: 80px;
   max-height: 260px;
 }
+.qm-input:focus,
+.qm-textarea:focus {
+  border-color: #d62839;
+}
+.qm-input:disabled,
+.qm-textarea:disabled {
+  background-color: var(--bs-secondary-bg);
+  cursor: not-allowed;
+}
+.qm-input.error,
+.qm-textarea.error {
+  border-color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.08);
+}
+
 
 /* Toolbar */
 .qm-toolbar {
@@ -168,3 +193,16 @@
   position: sticky;
   bottom: 0;
 }
+.qm-actions .btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.qm-actions .btn.loading {
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.qm-actions .btn:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+

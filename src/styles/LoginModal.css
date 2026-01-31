@@ -13,7 +13,7 @@
   z-index: 2000;
 }
  
-/* Card */
+/* Card */ 
 .lm-card {
   width: 100%;
   max-width: 450px;
@@ -23,7 +23,7 @@
   border: 1px solid var(--bs-border-color);
   padding: 20px 22px;
   position: relative;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.14); /* softened */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* softened */
 }
 
 /* Close button */
@@ -37,6 +37,20 @@
   font-size: 22px;
   cursor: pointer;
   border-radius: 6px;
+}
+.lm-close:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.lm-close:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+.lm-close:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+.lm-close:disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Tabs */
@@ -89,9 +103,16 @@
   font-size: 14px;
   outline: none;
 }
-
 .lm-input:focus {
-  border-color: var(--bs-border-color);
+  border-color: #d62839;
+}
+.lm-input:disabled {
+  background-color: var(--bs-secondary-bg);
+  cursor: not-allowed;
+}
+.lm-input.error {
+  border-color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.08);
 }
 
 /* Primary button */
@@ -105,10 +126,23 @@
   font-weight: 600;
   cursor: pointer;
 }
-
+.lm-primary:hover {
+  background-color: #b51f2f;
+}
+.lm-primary:active {
+  opacity: 0.9;
+}
+.lm-primary:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
 .lm-primary[disabled] {
   opacity: 0.7;
   cursor: not-allowed;
+}
+.lm-primary.loading {
+  pointer-events: none;
+  opacity: 0.85;
 }
 
 /* Error — no animation */

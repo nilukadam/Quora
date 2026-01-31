@@ -11,6 +11,7 @@
   border-radius: 12px;
   background-color: var(--bs-card-bg);
   border: 1px solid var(--bs-border-color);
+  cursor: default;
 }
 
   /* Title  */
@@ -30,7 +31,7 @@
 
 /* Hover kept very subtle */
 .following-card:hover {
-  background-color: rgba(0,0,0,0.02);
+  background-color: rgba(0,0,0,0.015);
 }
 
 /* Avatar */
@@ -48,6 +49,11 @@
   font-weight: 600;
   color: var(--bs-body-color);
 }
+.following-card h6:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 
 /* Secondary text */
 .following-card .text-muted {
@@ -66,6 +72,14 @@
   align-items: center;
   gap: 4px;
 }
+.following-card .btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.following-card .btn:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+
 
 /* Responsive behavior unchanged */
 @media (max-width: 768px) {

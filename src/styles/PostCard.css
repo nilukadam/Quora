@@ -8,14 +8,7 @@
   color: var(--bs-body-color);
   border: 1px solid var(--bs-border-color);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   margin-bottom: 1.25rem; /* softened */
-}
-
-/* hover lift REMOVED (too expressive for Step 2) */
-.post-card:hover,
-.post-card:focus-within {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 /* ---------- Header ---------- */
@@ -30,6 +23,10 @@
 
 .post-header small {
   line-height: 1.2;
+}
+
+.post-header .actions button:hover {
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 
@@ -54,6 +51,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.post-header .author h6:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .post-header .author .meta {
@@ -89,6 +90,7 @@
 /* text wrapper */
 .post-text {
   position: relative;
+  scroll-margin-top: 12px;
 }
 
 /* content */
@@ -105,12 +107,13 @@
 .post-content.collapsed {
   max-height: 4.8rem;
   overflow: hidden;
+  position: relative;
 }
 
 /* read more */
 .post-readmore {
   display: inline-block;
-  margin-top: 0.5rem;
+  margin-top: 0.35rem;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--bs-danger, #d62839);
@@ -123,6 +126,11 @@
 .post-readmore:hover {
   text-decoration: underline;
 }
+
+.post-readmore:active {
+  opacity: 0.7;
+}
+
 
 
 /* media */
@@ -162,6 +170,11 @@
   border: 1px solid transparent;
   color: var(--bs-body-color);
 }
+
+.post-footer .actions button:active {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
 
 /* hover lift REMOVED – calm interaction */
 .post-footer .actions button:hover {
@@ -220,8 +233,8 @@
 }
 
 /* ---------- Accessibility ---------- */
-.post-card :is(button, a):focus {
-  outline: 3px solid rgba(13,110,253,0.12);
+.post-card :is(button, a):focus-visible {
+  outline: 2px solid #d62839;
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -244,3 +257,10 @@
 .post-content.expanded {
   max-height: none;
 }
+
+.post-readmore,
+.post-footer .actions button {
+  transition: color 0.15s ease,
+  background-color 0.15s ease;
+}
+ 

@@ -9,6 +9,7 @@
   border: 1px solid var(--bs-border-color);
   overflow: hidden;
   padding: 0;
+  cursor: pointer;
 }
 
 /* Space Title  */
@@ -40,8 +41,17 @@
 
 /* Hover — very subtle, no lift */
 .space-card:hover {
-  background-color: rgba(0,0,0,0.02);
+  background-color: rgba(0,0,0,0.015);
 }
+.space-card .btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.space-card .btn:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+
 
 /* Banner */
 .space-banner {

@@ -85,7 +85,7 @@
 
 /* Accessibility — quieter focus */
 .answers-list .post-card:focus-within {
-  outline: 3px solid rgba(13,110,253,0.1);
+  outline: 2px solid #d62839;
   outline-offset: 2px;
 }
 

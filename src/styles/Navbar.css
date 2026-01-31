@@ -1,206 +1,232 @@
 /* ===========================
-   Navbar container
+   Navbar
    =========================== */
 
-.qc-navbar {
-  height: 70px;
-  font-size: 15px;
-  z-index: 1050;
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  border-bottom: 1px solid var(--bs-border-color);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); /* softened */
-}
+   .qc-navbar {
+    height: 70px;
+    font-size: 15px;
+    z-index: 1050;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  
+  /* ===========================
+     Logo
+     =========================== */
+  
+  .qc-logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #eb3749;
+    margin-top: 4px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+  
+  .qc-logo:hover {
+    color: #c92a3a;
+  }
+  
+  /* ===========================
+     Nav links
+     =========================== */
+  
+  .qc-links .qc-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 22px;
+    color: #495057;
+    cursor: pointer;
+  }
+  
+  .qc-link:hover {
+    color: #d62839;
+  }
+  
+  .qc-link.active {
+    color: #d62839;
+    border-bottom: 2px solid #d62839;
+  }
+  .qc-links .qc-link:active {
+  background-color: rgba(0, 0, 0, 0.06);
+  }
 
-/* ===========================
-   Logo (brand stays primary)
-   =========================== */
-
-.qc-logo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #eb3749;
-  margin-top: 4px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-}
-
-.qc-logo:hover {
-  color: #810e2ace;
-}
-
-/* ===========================
-   Navigation links
-   =========================== */
-
-.qc-links .qc-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 20px;
-  border-radius: 6px;
-  font-size: 22px;
-  color: #495057; /* calmer than pure dark */
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.qc-link:hover {
-  color: #d62839;
-  background-color: #f5f5f5;
-}
-
-.qc-link.active {
-  color: #d62839;
-  border-bottom: 2px solid #d62839;
-}
-
-/* ===========================
-   Search
-   =========================== */
-
-.qc-search-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-left: 10px;
-}
-
-.qc-search {
-  width: 260px;
-  padding: 7px 36px 7px 28px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  border: 1px solid var(--bs-border-color);
-}
-
-.qc-search:focus {
-  outline: none;
-  border-color: #d62839;
-  box-shadow: 0 0 0 2px rgba(214, 40, 57, 0.15);
-}
-
-.qc-search-icon {
-  position: absolute;
-  left: 8px;
-  font-size: 16px;
-  color: #adb5bd; /* muted icon */
-}
-
-.qc-search-btn {
-  margin-left: 8px;
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #d62839;
-  color: #fff;
-  border: none;
-}
-
-.qc-search-btn:hover {
-  background-color: #a61c2d;
-}
-
-/* ===========================
-   Search suggestions
-   =========================== */
-
-.qc-suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  max-height: 260px;
-  overflow-y: auto;
-  background-color: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* softened */
-  z-index: 2000;
-}
-
-.qc-suggestion-item {
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.qc-suggestion-item:hover {
-  background-color: #f7f7f7;
-}
-
-/* ===========================
-   Add Question button
-   =========================== */
-
-.qc-add-btn {
-  margin-left: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6px 12px;
-  border-radius: 6px;
-}
-
-/* ===========================
-   Profile
-   =========================== */
-
-.qc-profile-wrapper {
-  position: relative;
-  z-index: 1050;
-}
-
-.qc-profile-btn {
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 50%;
-  background: transparent;
-}
-
-.qc-profile {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: var(--bs-card-bg, #f1f3f5);
-  border: 1px solid var(--bs-border-color);
-}
-
-.qc-profile-dropdown {
-  position: absolute;
-  top: 110%;
-  right: 0;
-  margin-top: 6px;
-  min-width: 160px;
-  background-color: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 2000;
-}
-
-.qc-profile-dropdown div {
-  padding: 10px 16px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.qc-profile-dropdown div:hover {
-  background-color: #f5f5f5;
-}
-
-/* ===========================
-   Scrollbar (subtle)
-   =========================== */
-
-.qc-suggestions::-webkit-scrollbar {
-  width: 6px;
-}
-
-.qc-suggestions::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 4px;
-}
+  /* ===========================
+     Search
+     =========================== */
+  
+  .qc-search-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 10px;
+  }
+  
+  .qc-search {
+    width: 260px;
+    padding: 7px 36px 7px 28px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-border-color);
+  }
+  
+  .qc-search:focus {
+    outline: none;
+    border-color: #d62839;
+  }
+  
+  .qc-search-icon {
+    position: absolute;
+    left: 8px;
+    font-size: 16px;
+    color: #adb5bd;
+  }
+  
+  .qc-search-btn {
+    margin-left: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: #d62839;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .qc-search-btn:hover {
+    background-color: #a61c2d;
+  }
+  
+  /* ===========================
+     Search suggestions
+     =========================== */
+  
+  .qc-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 260px;
+    overflow-y: auto;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    z-index: 2000;
+  }
+  
+  .qc-suggestion-item {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .qc-suggestion-item:hover {
+    background-color: #f7f7f7;
+  }
+  
+  /* ===========================
+     Add Question
+     =========================== */
+  
+  .qc-add-btn {
+    margin-left: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+  
+  /* ===========================
+     Profile
+     =========================== */
+  
+  .qc-profile-wrapper {
+    position: relative;
+    z-index: 1050;
+  }
+  
+  .qc-profile-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  .qc-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--bs-card-bg, #f1f3f5);
+    border: 1px solid var(--bs-border-color);
+  }
+  
+  .qc-profile-btn:hover .qc-profile {
+    border-color: #d62839;
+  }
+  
+  .qc-profile-btn:focus-visible {
+    outline: 2px solid #d62839;
+    outline-offset: 2px;
+  }
+  
+  /* ===========================
+     Profile dropdown
+     =========================== */
+  
+  .qc-profile-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    margin-top: 6px;
+    min-width: 160px;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    z-index: 2000;
+  }
+  
+  .qc-profile-dropdown div {
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .qc-profile-dropdown div:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* ===========================
+     Scrollbar
+     =========================== */
+  
+  .qc-suggestions::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .qc-suggestions::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 4px;
+  }
+  
+  /* ===========================
+     Smooth hover
+     =========================== */
+  
+  .qc-link,
+  .qc-search,
+  .qc-search-btn,
+  .qc-profile-btn {
+    transition: color 0.15s ease,
+                border-color 0.15s ease,
+                background-color 0.15s ease;
+  }
+  

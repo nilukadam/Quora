@@ -8,6 +8,7 @@
   background-color: var(--bs-secondary-bg, #e9ecef);
   border-radius: 6px;
   position: relative;
+  pointer-events: none;
 }
 
 /* NO shimmer, NO animation */

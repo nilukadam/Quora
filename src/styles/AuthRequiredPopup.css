@@ -13,7 +13,7 @@
   justify-content: center;
   z-index: 2200;
 }
-
+ 
 /* Popup card */
 .auth-popup-card {
   background-color: var(--bs-body-bg, #fff);
@@ -24,7 +24,7 @@
   max-width: 320px;
   text-align: center;
   border: 1px solid var(--bs-border-color);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.14); /* softened */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* softened */
 }
 
 /* Message */
@@ -38,6 +38,13 @@
 .auth-popup-actions button {
   font-weight: 600;
   min-width: 80px;
+  cursor: pointer;
+}
+.auth-popup-actions button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.auth-popup-actions button:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
 }
 
-/* No hover drama */

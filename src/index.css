@@ -19,7 +19,7 @@ body {
 
 /* Calm default card appearance (Bootstrap-safe) */
 .card {
-  background-color: var(--bs-body-bg);
+  background-color: var(--bs-card-bg);
   color: var(--bs-body-color);
   border-color: var(--bs-border-color);
 }

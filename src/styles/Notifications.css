@@ -5,6 +5,7 @@
 .notification-item {
   position: relative;
   padding: 0.9rem 1.25rem;
+  cursor: pointer;
 }
 .notifications-title {
   font-size: 1.4rem;
@@ -17,7 +18,7 @@
 /* Unread state — signal without shouting */
 .notification-item.unread {
   background-color: rgba(220, 53, 69, 0.06);
-  border-left: 3px solid #dc3545;
+  border-left: 2px solid #dc3545;
   padding-left: calc(1rem - 3px);
 }
 .notification-item .fw-medium {
@@ -58,7 +59,7 @@
 
 
 /* Hover kept minimal (no lift, no shadow) */
-.notification-item:hover {
+.notification-item:not(.unread):hover {
   background-color: rgba(220, 53, 69, 0.04);
 }
 
@@ -87,4 +88,10 @@
   font-weight: 600;
   text-align: center;
   pointer-events: none;
+}
+
+.notification-item:focus-visible {
+  outline: 2px solid #dc3545;
+  outline-offset: 2px;
+  border-radius: 6px;
 }

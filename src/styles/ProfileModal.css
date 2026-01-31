@@ -24,8 +24,9 @@
   padding: 18px;
   position: relative;
   max-height: 90vh;
-  overflow: auto;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.14); /* softened */
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08); /* softened */
 }
 
 /* Header */
@@ -53,6 +54,21 @@
   padding: 6px;
   border-radius: 6px;
 }
+.pm-close:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.pm-close:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+.pm-close:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.pm-close:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+
 
 /* ---------- View mode ---------- */
 .pm-view {
@@ -144,6 +160,9 @@
   font-weight: 600;
   cursor: pointer;
 }
+.pm-upload-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
 
 /* Fields */
 .pm-fields-col {
@@ -170,15 +189,23 @@
   font-size: 14px;
   outline: none;
 }
-
 .pm-input:focus,
 .pm-textarea:focus {
-  border-color: var(--bs-border-color);
+  border-color: #d62839;
 }
-
 .pm-textarea {
   resize: vertical;
   min-height: 80px;
+}
+.pm-input.error,
+.pm-textarea.error {
+  border-color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.08);
+}
+.pm-input:disabled,
+.pm-textarea:disabled {
+  background-color: var(--bs-secondary-bg);
+  cursor: not-allowed;
 }
 
 /* Error */
@@ -199,23 +226,47 @@
   font-weight: 600;
   cursor: pointer;
 }
+.pm-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
 
+.pm-btn:focus-visible {
+  outline: 2px solid #d62839;
+  outline-offset: 2px;
+}
+
+/* btn primary */
 .pm-btn-primary {
   background-color: var(--bs-primary);
   color: #fff;
   border-color: var(--bs-primary);
 }
-
 .pm-btn-primary[disabled] {
   opacity: 0.7;
   cursor: not-allowed;
 }
+.pm-btn-primary[disabled]:hover {
+  background-color: var(--bs-primary);
+}
+.pm-btn-primary.loading {
+  pointer-events: none;
+  opacity: 0.85;
+}
+.pm-btn-primary:active {
+  opacity: 0.9;
+}
+
+/* btn secondary */
 
 .pm-btn-secondary {
   background: transparent;
   color: var(--bs-body-color);
   border: 1px solid var(--bs-border-color);
 }
+.pm-btn-secondary:active {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
 
 /* Responsive */
 @media (max-width: 880px) {
@@ -234,13 +285,6 @@
   }
 }
 
-/* Accessibility */
-.pm-modal :is(button, a, input, textarea):focus {
-  outline: 3px solid rgba(13,110,253,0.1);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-
 /* Scrollbar — subtle */
 .pm-modal::-webkit-scrollbar {
   width: 8px;
@@ -250,3 +294,4 @@
   background-color: rgba(0,0,0,0.06);
   border-radius: 8px;
 }
+
