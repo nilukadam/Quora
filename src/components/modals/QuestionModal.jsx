@@ -108,14 +108,12 @@ export default function QuestionModal({ isOpen, onClose, onSubmit, initialDraft 
     const maxMB = 4;
     if (file.size > maxMB * 1024 * 1024) {
       setError(`Image too large — max ${maxMB} MB.`);
-      toast.error(`Image too large — max ${maxMB} MB.`);
       return;
     }
     const reader = new FileReader();
     reader.onload = (e) => setImageDataUrl(e.target.result);
     reader.onerror = () => {
       setError(" Failed to read image file.");
-      toast.error(" Failed to read image file.");
     }
     reader.readAsDataURL(file);
   };
@@ -144,7 +142,6 @@ export default function QuestionModal({ isOpen, onClose, onSubmit, initialDraft 
     if (tab === "ask") {
       if (!title.trim()) {
         setError("Please enter a question title.");
-        toast.error("Please enter a question title")
         return null;
       }
       payload.type = "question";
@@ -154,7 +151,6 @@ export default function QuestionModal({ isOpen, onClose, onSubmit, initialDraft 
       // post
       if (!postContent.trim() && !imageDataUrl) {
         setError("Please write something or add an image.");
-        toast.error("Please write something or add an image.");
         return null;
       }
       payload.type = "post";
@@ -169,7 +165,6 @@ export default function QuestionModal({ isOpen, onClose, onSubmit, initialDraft 
 
     if (!isAuthenticated) {
       setError("You must be logged in to post. Please login first.");
-      toast("Please login to continue.")
       return;
     }
 

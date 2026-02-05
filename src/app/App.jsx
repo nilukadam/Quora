@@ -60,7 +60,7 @@ export default function App() {
     (fn) => {
       if (!isAuthenticated) {
         // store the intended action and show auth prompt
-        setPendingAction(() => fn);
+        setPendingAction(() => fn); 
         setShowAuthPopup(true);
         toast("Please login to continue");
         return false;
@@ -274,13 +274,16 @@ export default function App() {
       />
 
       {/* Global Toaster */}
-      <Toaster position="top-right" />
+      <Toaster position="top-right"
+      toastOptions={{
+        duration: 1200, //1.2 second
+      }} />
 
       {/* Main content: container wrapper */}
       <main className="container my-4 app-main" style={{ minHeight: "70vh", paddingTop: "72px" }}>
         <ErrorBoundary>
           <Suspense fallback={<div className="text-center my-5">Loading...</div>}>
-            <AppRoutes
+            <AppRoutes  
               onAskClick={openQuestion}
               onTryPost={(draft) => handleTryPost(draft)}
               onCreateSpace={(name) => handleOpenCreateSpace(name)}

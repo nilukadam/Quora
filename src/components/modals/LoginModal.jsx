@@ -99,7 +99,6 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
     setLoading(true);
     try {
       await login({ email: loginEmail.trim(), password: loginPassword });
-      toast.success("Logged in");
       try {
         await onSuccess?.();
       } catch { /* ignore parent callback errors */ }
@@ -135,7 +134,6 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
     try {
       // For frontend-only demo, login() acts as registration/merge
       await login({ email: signupEmail.trim(), password: signupPassword, name: name.trim() });
-      toast.success("Account created");
       try {
         await onSuccess?.();
       } catch { /* ignore */ }

@@ -8,6 +8,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useFeed } from "../hooks/useFeed";
+import { useAuth } from "../hooks/useAuth"; 
 import "../styles/FilterSidebar.css";
 
 export default function FilterSidebar({ onCreateSpaceClick }) {
@@ -43,13 +44,20 @@ export default function FilterSidebar({ onCreateSpaceClick }) {
     .slice(0, 6);
 
   const openCreateSpace = (prefill = "") => {
+    if (!isAuthenticated) {
+      window.dispatchEvent(new CustomEvent("qc:openLogin"));
+      return;
+    }
     if (typeof onCreateSpaceClick === "function") {
       onCreateSpaceClick(prefill);
       return;
     }
     // legacy fallback event — App.jsx listens and will gate auth/profile
-    window.dispatchEvent(new CustomEvent("qc:openSpaceModal", { detail: { prefill } }));
+    window.dispatchEvent(
+      new CustomEvent("qc:openSpaceModal", { detail: { prefill } }));
   };
+
+  const { isAuthenticated } = useAuth();
 
   const handleSpaceClick = (space) => {
     if (!space || !space.name) return;
@@ -69,7 +77,7 @@ export default function FilterSidebar({ onCreateSpaceClick }) {
           <li className="text-muted small">No spaces yet.</li>
         ) : (
           topSpaces.map((s) => (
-            <li
+            <li 
               key={s.id || s.name}
               className="space-item d-flex align-items-start mb-2"
               role="listitem"

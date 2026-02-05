@@ -1,5 +1,5 @@
 // FILE: src/components/cards/AnswerPostCard.jsx
-import React, { useMemo, useState } from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import { v4 as uuid } from "uuid";
 import { toast } from "react-hot-toast";
@@ -47,6 +47,8 @@ export default function AnswerPostCard({ post }) {
   const [expanded, setExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const contentRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false)
 
   // Defensive destructure with defaults
   const {
@@ -95,8 +97,20 @@ export default function AnswerPostCard({ post }) {
     : typeof content === "object"
     ? JSON.stringify(content)
     : String(content ?? "");
+
   const plainLen = safeContent.replace(/\n+/g, " ").length;
+    useEffect(() => {
+      if (!expanded && contentRef.current) {
+        const el = contentRef.current;
+        setIsOverflowing(el.scrollHeight > el.clientHeight)
+      }
+    }, [expanded, safeContent])
+
   const handleFollowToggle = () => {
+    if (!isAuthenticated) {
+      toast.error("Please login to follow useres");
+      return;
+    }
     if (!canFollow) {
       toast("Cannot follow this author");
       return;
@@ -199,13 +213,14 @@ export default function AnswerPostCard({ post }) {
           <div className="post-text">
             <div className="post-text-inner">
              <p
-               className={`post-content ${plainLen > 50 && !expanded ? "collapsed" : "expanded"}`}
+               ref={contentRef}
+               className={`post-content ${!expanded ? "collapsed" : "expanded"}`}
                aria-live="polite"
               >
                 {safeContent} 
               </p>
 
-              {plainLen > 50 && (
+              {(plainLen > 50 || isOverflowing) && (
                  <button
                     className="post-readmore"
                     onClick={() => setExpanded(s => !s)}
@@ -238,16 +253,28 @@ export default function AnswerPostCard({ post }) {
         <div className="d-flex align-items-center gap-2">
           <button
             className={`btn btn-sm btn-outline-success d-flex align-items-center btn-vote-up ${post.__upvoted ? "active" : ""}`}
-            onClick={() => upvotePost(postId)}
+            onClick={() => {
+              if (!isAuthenticated) {
+                toast.error("Please login to vote")
+                return;
+              }
+              upvotePost(postId);
+            }}
             aria-label="Upvote"
           >
             <FaThumbsUp className="me-1" />
             {upvotes}
-          </button>
+          </button> 
 
           <button
             className={`btn btn-sm btn-outline-danger d-flex align-items-center btn-vote-down ${post.__downvoted ? "active" : ""}`}
-            onClick={() => downvotePost(postId)}
+            onClick={() => {
+              if (!isAuthenticated) {
+                toast.error("Please login to vote");
+                return;
+              }
+              downvotePost(postId)
+            }}
             aria-label="Downvote"
           >
             <FaThumbsDown className="me-1" />

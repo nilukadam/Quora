@@ -1,7 +1,6 @@
 // FILE: src/features/Home/Feed.jsx
-import React, { useEffect, useMemo, useRef, useState, useContext } from "react";
+import React, {useEffect, useMemo, useRef, useState,} from "react";
 import { useFeed } from "../../hooks/useFeed";
-import { posts as seedPosts } from "../../data"; // fallback seed data
 import AnswerPostCard from "../../components/cards/AnswerPostCard";
 import FeedSkeleton from "../../components/skeletons/Feedskeleton";
 
@@ -20,31 +19,19 @@ import FeedSkeleton from "../../components/skeletons/Feedskeleton";
 const PAGE_SIZE = 5;
 
 export default function Feed({ onTryPost, onCreateSpace, onProfileClick } = {}) {
-  // Attempt to read posts from FeedContext; if provider not present, fall back gracefully.
-  const postsSource = useMemo(() => {
-    let ctxPosts = [];
-    try {
-      const ctx = useContext(FeedContext);
-      ctxPosts = Array.isArray(ctx?.posts) ? ctx.posts : [];
-    } catch {
-      ctxPosts = [];
-    }
-  
-    return ctxPosts.length > 0 ? ctxPosts : Array.isArray(seedPosts) ? seedPosts : [];
-  }, [useFeed, seedPosts]);  
-
+  const { posts = [] } = useFeed();
   // Visible count for infinite scroll
   const [visible, setVisible] = useState(PAGE_SIZE);
   const sentinelRef = useRef(null);
 
   // Order newest-first; tolerate missing/invalid createdAt by treating as 0
   const ordered = useMemo(() => {
-    return [...postsSource].sort((a, b) => {
+    return [...posts].sort((a, b) => {
       const ta = Number.isFinite(Date.parse(a?.createdAt)) ? Date.parse(a.createdAt) : 0;
       const tb = Number.isFinite(Date.parse(b?.createdAt)) ? Date.parse(b.createdAt) : 0;
       return tb - ta;
     });
-  }, [postsSource]);
+  }, [posts]);
 
   // Reset visible when posts list identity changes (new post added/removed)
   useEffect(() => {
@@ -56,7 +43,7 @@ export default function Feed({ onTryPost, onCreateSpace, onProfileClick } = {}) 
     const el = sentinelRef.current;
     if (!el) {
       return;
-    }
+    } 
 
     if (typeof IntersectionObserver === "undefined") {
       // no IO support -> show all

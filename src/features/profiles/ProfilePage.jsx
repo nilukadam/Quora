@@ -13,7 +13,6 @@ import { useFeed } from "../../hooks/useFeed";
 import { useAuth } from "../../hooks/useAuth";
 import ProfileModal from "../../components/modals/ProfileModal";
 import AnswerPostCard from "../../components/cards/AnswerPostCard";
-import { toast } from "react-hot-toast";
 import "../../styles/Profile.css";
 
 // small neutral avatar fallback (data URI SVG)
@@ -52,11 +51,9 @@ export default function ProfilePage() {
     try {
       // updateProfile comes from AuthContext (persists to localStorage)
       updateProfile?.(patch);
-      toast.success("Profile updated");
       setEditOpen(false);
-    } catch (err) {
+    } catch (err) { 
       console.error("Profile save failed", err);
-      toast.error("Failed to save profile");
     }
   };
 

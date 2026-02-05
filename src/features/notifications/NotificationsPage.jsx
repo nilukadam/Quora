@@ -1,7 +1,6 @@
 // FILE: src/features/notifications/NotificationsPage.jsx
 import React, { useMemo, useState } from "react";
 import { useFeed } from "../../hooks/useFeed";
-import { toast } from "react-hot-toast";
 import { FaCheckCircle, FaRegBell, FaTimes, FaEnvelopeOpenText } from "react-icons/fa";
 import "../../styles/Notifications.css";
 
@@ -33,11 +32,14 @@ export default function NotificationsPage() {
   const toggleExpand = (id) => setExpandedIds((p) => ({ ...p, [id]: !p[id] }));
 
   const handleMarkAll = () => {
-    const changed = markAllNotificationsRead?.();
-    if (changed) toast.success("All notifications marked as read"); else toast("Already up to date");
+    markAllNotificationsRead?.();
   };
-  const handleMarkOne = (id) => { if (markNotificationRead?.(id)) toast.success("Marked as read"); };
-  const handleDismiss = (id) => { if (dismissNotification?.(id)) toast("Dismissed"); };
+  const handleMarkOne = (id) => { 
+    markNotificationRead?.(id);
+  };
+  const handleDismiss = (id) => {
+    dismissNotification?.(id); 
+  };
 
   return (
     <div className="container mt-4 notifications-page">

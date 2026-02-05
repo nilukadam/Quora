@@ -10,7 +10,7 @@ import {
 
 export const FeedContext = createContext(null);
 
-/**
+/** 
  * FeedProvider
  * ------------
  * - Manages posts, spaces, notifications, following

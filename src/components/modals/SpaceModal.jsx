@@ -51,8 +51,7 @@ export default function SpaceModal({ isOpen, onClose, onCreate }) {
   if (!isOpen) return null;
 
   const handleCreate = (e) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
 
     if (!name.trim()) {
       toast.error("Please enter a space name");
@@ -61,12 +60,10 @@ export default function SpaceModal({ isOpen, onClose, onCreate }) {
 
     try {
       onCreate?.({ name: name.trim(), description: description.trim() });
-      toast.success(`Space "${name}" created 🎉`);
 
       // Reset state and close
       setName("");
       setDescription("");
-      setError("");
       onClose?.();
     } catch (err) {
       void err;

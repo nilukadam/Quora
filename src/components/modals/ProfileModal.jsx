@@ -89,7 +89,6 @@ export default function ProfileModal({
     setError("");
     if (!profile.name.trim()) {
       setError("Please enter your name.");
-      toast.error("Please enter your name.");
       return;
     }
 
@@ -104,7 +103,6 @@ export default function ProfileModal({
       });
       setSaving(false);
       setMode("view");
-      toast.success("Profile updated");
       onClose?.();
     } catch (err) {
       setError(err?.message || "Failed to save profile.");
@@ -121,7 +119,6 @@ export default function ProfileModal({
     const maxMB = 4;
     if (file.size > maxMB * 1024 * 1024) {
       setError(`Image too large - max ${maxMB} MB`);
-      toast.error(`Image too large - max ${maxMB} MB`);
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }

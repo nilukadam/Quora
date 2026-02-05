@@ -8,7 +8,7 @@ import {
   FaLayerGroup,
   FaBell,
   FaPlus,
-  FaSearch,
+  FaSearch, 
   FaMoon,
   FaSun,
 } from "react-icons/fa";
@@ -255,7 +255,13 @@ export default function Navbar({
           {/* Add Question */}
           <button
             className="qc-add-btn btn btn-outline-danger"
-            onClick={onAddQuestionClick}
+            onClick={() => {
+              if (!isAuthenticated) {
+                openLogin();
+                return;
+              }
+              onAddQuestionClick();
+            }}
             aria-label="Add question"
             title="Ask a question"
           >
