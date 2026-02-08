@@ -13,7 +13,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useContext } from "react";
 import { FeedContext } from "../../context/FeedContext";
 import { useAuth } from "../../hooks/useAuth";
-import { FaSearch, FaUserPlus, FaUserCheck } from "react-icons/fa";
+import { FaUserPlus, FaUserCheck } from "react-icons/fa";
 import "../../styles/Space.css";
 
 export default function SpacesPage() {
@@ -32,10 +32,8 @@ export default function SpacesPage() {
 
   const toggleJoinSpace = 
     typeof feedCtx?.toggleJoinSpace === "function" 
-    ? feedCtx.toggleJoinSpace 
+    ? feedCtx.toggleJoinSpace
     : null;
-
-  const ctxFollowing = Array.isArray(feedCtx?.following) ? feedCtx.following : [];
 
 
   // Local UI state
@@ -106,8 +104,8 @@ export default function SpacesPage() {
 
 
   return (
-    <div className="container mt-4 spaces-page">
-      <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-3">
+    <div className="container-fluid mt-4 spaces-page px-4">
+      <div className="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-3">
         <div>
           <h3 className="mb-1 spaces-title">
             Spaces {topic ? <span className="space-topic">· {topic}</span> : null}
@@ -117,9 +115,8 @@ export default function SpacesPage() {
           </div>
         </div>
 
-        <div className="d-flex gap-2 align-items-center w-100 w-md-auto">
+        <div className="d-flex gap-2 align-items-center w-100 w-md-auto ms-md-auto">
           <div className="position-relative" style={{ maxWidth: 340, width: "100%" }}>
-            <FaSearch className="spaces-search-icon" aria-hidden="true" />
             <input
               type="search"
               className="form-control spaces-search-input"

@@ -12,7 +12,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useFeed } from "../../hooks/useFeed";
-import { FaUserMinus, FaUserPlus, FaSearch } from "react-icons/fa";
+import { FaUserMinus} from "react-icons/fa";
 import "../../styles/Following.css";
 
 export default function FollowingPage() { 
@@ -66,16 +66,7 @@ export default function FollowingPage() {
         <h3 className="m-0 following-title">Following</h3>
 
         {/* Search box */}
-        <div className="position-relative" style={{ maxWidth: 280 }}>
-          <FaSearch
-            className="position-absolute"
-            style={{
-              top: "50%",
-              left: 10,
-              transform: "translateY(-50%)",
-              color: "#888",
-            }} 
-          />
+        <div className="position-relative" style={{ maxWidth: 280, width: "100%" }}>
           <input
             type="search"
             className="form-control ps-4"
