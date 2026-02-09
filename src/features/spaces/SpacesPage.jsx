@@ -39,6 +39,9 @@ export default function SpacesPage() {
   // Local UI state
   const [q, setQ] = useState("");
 
+  const [localJoined, setLocalJoined] = useState({});
+
+
   // If the page was opened with ?topic=Name, prefill search (helpful UX)
   useEffect(() => {
     if (topic) setQ(topic);
@@ -99,7 +102,7 @@ export default function SpacesPage() {
   // Helper to determine UI join state (context-driven if we can infer it, else local)
   const isJoined = (space) => {
     if (!space || !space.id) return false; 
-      return !!space.__joined;
+      return Boolean(space.__joined ?? localJoined[space.id]);
   };
 
 
