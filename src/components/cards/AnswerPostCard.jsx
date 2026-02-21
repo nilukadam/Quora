@@ -108,9 +108,8 @@ export default function AnswerPostCard({ post }) {
 
   const plainLen = safeContent.replace(/\n+/g, " ").length;
     useEffect(() => {
-      if (!expanded && contentRef.current) return;
-
       const el = contentRef.current;
+      if (!el) return;
 
       const measure = () => {
         setIsOverflowing(el.scrollHeight > el.clientHeight)

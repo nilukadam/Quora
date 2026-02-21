@@ -1,6 +1,7 @@
 // FILE: src/components/layout/Navbar.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 import {
   FaHome,
   FaUserFriends,
@@ -8,12 +9,10 @@ import {
   FaLayerGroup,
   FaBell,
   FaPlus,
-  FaSearch, 
+  FaSearch,
   FaMoon,
   FaSun,
 } from "react-icons/fa";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
 
 import "../../styles/Navbar.css";
 import { trendingTopics } from "../../data/trendingTopics";
@@ -22,358 +21,391 @@ import { useFeed } from "../../hooks/useFeed";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
 
-/**
- * Navbar
- *
- * Props:
- * - onAddQuestionClick
- * - onProfileClick
- * - onCreateSpace
- * - onLoginClick
- *
- * Notes:
- * - Uses data-bs-theme via ThemeContext; theme toggle calls toggleTheme()
- * - Notification badge shows unread notifications count
- * - Accessible keyboard interactions for menus and suggestion list
- */
-
 export default function Navbar({
   onAddQuestionClick,
   onProfileClick,
-  // onCreateSpace,------ commented for temprary 
   onLoginClick,
+  onToggleSidebar,
 }) {
   const navigate = useNavigate();
+  const navbarRef = useRef(null);
 
-  // Contexts 
   const { isAuthenticated, user, logout } = useAuth();
   const { notifications } = useFeed();
   const { theme, toggleTheme } = useTheme();
 
-  // ---------- Avatar placeholders ----------
-  // Small inline SVG fallback used when no avatar is provided
+  // ================= STATE =================
+
+  const [activeMenu, setActiveMenu] = useState(null); 
+  // null | "search" | "profile"
+
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const profileRef = useRef(null);
+  const searchRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  // ================= AVATAR =================
+
   const placeholderSvg = encodeURIComponent(
     `<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 24 24' fill='none'>
        <rect rx='12' width='24' height='24' fill='%23e9ecef'/>
        <path d='M12 12a3 3 0 100-6 3 3 0 000 6zm0 2c-3 0-6 1.5-6 3v1h12v-1c0-1.5-3-3-6-3z' fill='%23999'/>
      </svg>`
-    );
-    const placeholderDataUri = `data:image/svg+xml;charset=UTF-8,${placeholderSvg}`;
+  );
 
+  const avatarSrc = user?.avatar || `data:image/svg+xml;charset=UTF-8,${placeholderSvg}`;
 
-  // Always use placeholder if user has no avatar
-  const avatarSrc = user?.avatar || placeholderDataUri;
-
-  // ---------- Unread notifications count (fixed calculation) ----------
   const unreadCount = (notifications || []).filter(
-    (n) => n.unread === true).length;
+    (n) => n.unread === true
+  ).length;
 
-  // ---------- Search state ----------
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  // ================= SEARCH =================
 
-  // Profile dropdown state
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const filteredSuggestions =
+    searchQuery.trim() !== ""
+      ? trendingTopics.filter((topic) =>
+          topic.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : [];
 
-  const profileRef = useRef(null);
-  const searchInputRef = useRef(null);
-
-  // Filtered suggestions computed on render
-  const filteredSuggestions = (searchQuery || "").trim()
-    ? trendingTopics.filter((topic) =>
-        topic.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
-
-  // ---------- Handlers ----------
   const handleSearch = () => {
     const q = searchQuery.trim();
     if (!q) return;
     navigate(`/answers?q=${encodeURIComponent(q)}`);
     setSearchQuery("");
-    setShowSuggestions(false);
+    setActiveMenu(null);
     searchInputRef.current?.blur();
   };
 
   const handleSuggestionClick = (topic) => {
-    setSearchQuery(topic);
-    setShowSuggestions(false);
-    searchInputRef.current?.focus();
     navigate(`/answers?q=${encodeURIComponent(topic)}`);
+    setSearchQuery("");
+    setActiveMenu(null);
   };
 
-  // Open login (via prop or legacy event)
+  // ================= LOGIN / PROFILE =================
+
   const openLogin = () => {
     if (typeof onLoginClick === "function") onLoginClick();
     else window.dispatchEvent(new CustomEvent("qc:openLogin"));
   };
 
-  // Open profile (via prop or legacy event)
   const openProfile = (opts) => {
     if (typeof onProfileClick === "function") onProfileClick(opts);
-    else window.dispatchEvent(new CustomEvent("qc:openProfile", { detail: opts || {} }));
+    else window.dispatchEvent(
+      new CustomEvent("qc:openProfile", { detail: opts || {} })
+    );
   };
 
-  const openEditProfile = () => openProfile({ edit: true });
+  // ================= GLOBAL CLOSE HANDLER =================
 
-  // ---------- Close dropdowns on outside click or ESC ----------
   useEffect(() => {
-    const handleDocClick = (e) => {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setShowProfileDropdown(false);
-      }
-    };
-    const handleKey = (e) => {
-      if (e.key === "Escape" || e.key === "Esc") {
-        setShowProfileDropdown(false);
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleDocClick);
-    document.addEventListener("touchstart", handleDocClick);
-    document.addEventListener("keydown", handleKey);
-    return () => {
-      document.removeEventListener("mousedown", handleDocClick);
-      document.removeEventListener("touchstart", handleDocClick);
-      document.removeEventListener("keydown", handleKey);
-    };
-  }, []);
+  const handleClick = (e) => {
+    if (!navbarRef.current?.contains(e.target)) {
+      setActiveMenu(null);
+    }
+  };
 
-  // ---------- Render ----------
+  const handleKey = (e) => {
+    if (e.key === "Escape") {
+      setActiveMenu(null);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClick);
+  document.addEventListener("keydown", handleKey);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClick);
+    document.removeEventListener("keydown", handleKey);
+  };
+}, []);
+
+  // ================= SEARCH BOX =================
+
+  const SearchBox = () => (
+    <div ref={searchRef} className="qc-search-wrapper position-relative">
+      <FaSearch className="qc-search-icon" />
+      <input
+        ref={searchInputRef}
+        type="text"
+        className="qc-search"
+        placeholder="Search topics..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        onFocus={() => setActiveMenu("search")}
+        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+      />
+
+      {activeMenu === "search" && filteredSuggestions.length > 0 && (
+        <div className="qc-suggestions">
+          {filteredSuggestions.map((topic, i) => (
+            <div
+              key={i}
+              className="qc-suggestion-item"
+              onMouseDown={() => handleSuggestionClick(topic)}
+            >
+              {topic}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  // ================= PROFILE =================
+
+  const ProfileMenu = () => (
+    <div className="qc-profile-wrapper position-relative" ref={profileRef}>
+      <div
+         className="qc-profile-trigger"
+         onClick={() => {
+           if (!isAuthenticated) return openLogin();
+           setActiveMenu((prev) =>
+           prev === "profile" ? null : "profile"
+          );
+        }}
+      >
+         {isAuthenticated ? (
+             <img src={avatarSrc} alt="Profile" className="qc-profile" />
+           ) : (
+             <FaUserCircle size={28} className="qc-profile-placeholder-icon" />
+          )}
+        </div>
+
+
+      {activeMenu === "profile" && (
+        <div className="qc-profile-dropdown">
+          <div onClick={() => openProfile()}>My Profile</div>
+          <div onClick={() => openProfile({ edit: true })}>
+            Edit Profile
+          </div>
+          <div onClick={logout}>Logout</div>
+          <div onClick={toggleTheme}>
+            {theme === "light" ? "Dark Mode" : "Light Mode"}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  // ================= RENDER =================
+
   return (
-    <nav className="qc-navbar fixed-top bg-body shadow-sm" role="navigation" aria-label="Main navigation">
-      <div className="container-fluid d-flex align-items-center justify-content-between px-3">
-        {/* Logo */}
-        <button
-          className="navbar-brand btn-reset qc-logo"
-          onClick={() => navigate("/")}
-          aria-label="Go to home"
-        >
-          Quora
-        </button>
+    < div ref={navbarRef}>
+      {/* ================= DESKTOP ================= */}
+      <div className="d-none d-lg-block">
+        <nav className="qc-navbar fixed-top shadow-sm">
+          <div className="container-fluid d-flex align-items-center justify-content-between px-3">
 
-        {/* Center: links + search + add question */}
-        <div className="qc-center d-flex align-items-center gap-3">
-          {/* Links */}
-          <div className="qc-links d-flex gap-2" role="menubar" aria-label="Main menu">
-            <NavLink
-              to="/"
-              className={({ isActive }) => (isActive ? "qc-link active" : "qc-link")}
-              data-tooltip-id="navbar-tooltip"
-              data-tooltip-content="Home"
-              aria-label="Home"
-            >
-              <FaHome />
+            <NavLink to="/" className="qc-logo">
+               Quora
             </NavLink>
 
-            <NavLink
-              to="/following"
-              className={({ isActive }) => (isActive ? "qc-link active" : "qc-link")}
-              data-tooltip-id="navbar-tooltip"
-              data-tooltip-content="Following"
-              aria-label="Following"
-            >
-              <FaUserFriends />
-            </NavLink>
+            <div className="d-flex align-items-center gap-3">
 
-            <NavLink
-              to="/answers"
-              className={({ isActive }) => (isActive ? "qc-link active" : "qc-link")}
-              data-tooltip-id="navbar-tooltip"
-              data-tooltip-content="Answers"
-              aria-label="Answers"
-            >
-              <FaPen />
-            </NavLink>
+              <NavLink to="/" className="qc-link">
+                <FaHome />
+              </NavLink>
 
-            <NavLink
-              to="/spaces"
-              className={({ isActive }) => (isActive ? "qc-link active" : "qc-link")}
-              data-tooltip-id="navbar-tooltip"
-              data-tooltip-content="Spaces"
-              aria-label="Spaces"
-            >
-              <FaLayerGroup />
-            </NavLink>
+              <NavLink to="/following" className="qc-link">
+                <FaUserFriends />
+              </NavLink>
 
-            <NavLink
-              to="/notifications"
-              className={({ isActive }) => (isActive ? "qc-link active" : "qc-link")}
-              data-tooltip-id="navbar-tooltip"
-              data-tooltip-content="Notifications"
-              aria-label="Notifications"
-            >
-              <FaBell />
-              {unreadCount > 0 && (
-                <span className="qc-badge" aria-label={`${unreadCount} unread`}>
-                  {unreadCount > 99 ? "99+" : unreadCount}
-                </span>
-              )}
-            </NavLink>
-          </div>
+              <NavLink to="/answers" className="qc-link">
+                <FaPen />
+              </NavLink>
 
-          {/* Search */}
-          <div className="qc-search-wrapper position-relative" aria-haspopup="listbox">
-            <FaSearch className="qc-search-icon" aria-hidden="true" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Search topics, questions..."
-              className="qc-search"
-              value={searchQuery}
-              aria-label="Search"
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setShowSuggestions(true)}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
+              <NavLink to="/spaces" className="qc-link">
+                <FaLayerGroup />
+              </NavLink>
 
-            {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className="qc-suggestions" role="listbox" aria-label="Search suggestions">
-                {filteredSuggestions.map((topic, i) => (
-                  <div
-                    key={i}
-                    role="option"
-                    tabIndex={0}
-                    className="qc-suggestion-item"
-                    onMouseDown={() => handleSuggestionClick(topic)}
-                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleSuggestionClick(topic)}
-                  >
-                    {topic}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {searchQuery.trim() !== "" && (
-              <button type="button" className="qc-search-btn" onClick={handleSearch} aria-label="Search button">
-                Search
-              </button>
-            )}
-          </div>
-
-          {/* Add Question */}
-          <button
-            className="qc-add-btn btn btn-outline-danger"
-            onClick={() => {
-              if (!isAuthenticated) {
-                openLogin();
-                return;
-              }
-              onAddQuestionClick();
-            }}
-            aria-label="Add question"
-            title="Ask a question"
-          >
-            <FaPlus className="me-1" /> <span>Add Question</span>
-          </button>
-        </div>
-
-        {/* Right: theme toggle + profile + auth */}
-        <div className="qc-right d-flex align-items-center gap-2">
-          {/* Theme toggle */}
-          <button
-            className="btn btn-outline-secondary px-2 py-1"
-            type="button"
-            onClick={() => toggleTheme()}
-            aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
-            title={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
-          >
-            {theme === "light" ? <FaMoon /> : <FaSun />}
-          </button>
-
-          {/* Profile avatar & dropdown */}
-          <div className="qc-profile-wrapper position-relative" ref={profileRef}>
-            <button
-              className="qc-profile-btn btn-reset"
-              aria-haspopup="true"
-              aria-expanded={showProfileDropdown}
-              aria-label={isAuthenticated ? "Open profile menu" : "Open login menu"}
-              onClick={() => setShowProfileDropdown((p) => !p)}
-            >
-              <img
-                src={avatarSrc}
-                alt={isAuthenticated ? user?.name || "Profile" : "Login"}
-                className="rounded-circle qc-profile"
-                width={36}
-                height={36}
-                style={{ objectFit: "cover" }}
-                 onError={(e) => {
-                  e.currentTarget.src = placeholderDataUri;
-               }}
-              />
-
-            </button>
-
-            {showProfileDropdown && (
-              <div className="qc-profile-dropdown" role="menu" aria-label="Profile menu">
-                {isAuthenticated ? (
-                  <>
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        openProfile();
-                      }}
-                      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (setShowProfileDropdown(false), openProfile())}
-                    >
-                      My Profile
-                   </div>
-
-                    <div
-                      role="menuitem"
-                      tabIndex={0}
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        openEditProfile();
-                      }}
-                      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (setShowProfileDropdown(false), openEditProfile())}
-                    >
-                      Edit Profile
-                    </div>
-
-                    <div
-                      role="menuitem"
-                      tabIndex={0}
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        logout();
-                      }}
-                      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (setShowProfileDropdown(false), logout())}
-                    >
-                      Logout
-                    </div>
-                  </>
-                ) : (
-                  <div
-                    role="menuitem"
-                    tabIndex={0}
-                    onClick={() => {
-                      setShowProfileDropdown(false);
-                      openLogin();
-                    }}
-                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (setShowProfileDropdown(false), openLogin())}
-                  >
-                    Login / Register
-                  </div>
+              <NavLink
+                to="/notifications"
+                className="qc-link position-relative"
+              >
+                <FaBell />
+                {unreadCount > 0 && (
+                  <span className="qc-badge">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
                 )}
-              </div>
-            )}
-          </div>
+              </NavLink>
 
-          {/* Explicit auth button */}
-          <button
-            className="btn btn-outline-primary px-3 py-1"
-            onClick={isAuthenticated ? logout : openLogin}
-            aria-label={isAuthenticated ? "Logout" : "Login"}
-          >
-            {isAuthenticated ? "Logout" : "Login"}
-          </button>
+              <SearchBox />
+
+              <button
+                className="qc-add-btn btn btn-outline-danger"
+                onClick={() => {
+                  if (!isAuthenticated) return openLogin();
+                  onAddQuestionClick();
+                }}
+              >
+                <FaPlus className="me-1" /> Add Question
+              </button>
+            </div>
+
+            <div className="d-flex align-items-center gap-2">
+              <button
+                className="btn btn-outline-secondary px-2 py-1"
+                onClick={toggleTheme}
+              >
+                {theme === "light" ? <FaMoon /> : <FaSun />}
+              </button>
+
+              <ProfileMenu />
+            </div>
+          </div>
+        </nav>
+      </div>
+            {/* ================= MOBILE ================= */}
+      <div className="d-lg-none">
+
+        {/* ---- Row 1 ---- */}
+        <div className="qc-mobile-top fixed-top d-flex align-items-center justify-content-between px-3">
+
+          {!isMobileSearchOpen && (
+            <>
+              {/* Left Side: Hamburger + Logo */}
+<div className="d-flex align-items-center gap-2">
+
+  {/* Hamburger */}
+  <button
+    className="btn-reset"
+    onClick={() => {
+      if (typeof onToggleSidebar === "function") {
+        onToggleSidebar();
+      }
+    }}
+    aria-label="Open sidebar"
+  >
+    ☰
+  </button>
+
+  {/* Logo */}
+  <NavLink to="/" className="qc-logo">
+    Quora
+  </NavLink>
+
+</div>
+
+              <div className="d-flex align-items-center gap-3">
+
+                {/* Search Icon */}
+                <button
+                  className="btn-reset"
+                  onClick={() => {
+                    setIsMobileSearchOpen(true);
+                    setActiveMenu("search");
+                  }}
+                >
+                  <FaSearch size={18} />
+                </button>
+
+                {/* Add */}
+                <button
+                  className="btn-reset qc-mobile-add"
+                  onClick={() => {
+                    if (!isAuthenticated) return openLogin();
+                    onAddQuestionClick();
+                  }}
+                >
+                  <FaPlus size={18} />
+                </button>
+
+                {/* Profile */}
+                <button
+                   className="btn-reset"
+                   onClick={() => {
+                     if (!isAuthenticated) return openLogin();
+                     setActiveMenu((prev) =>
+                        prev === "profile" ? null : "profile"
+                      );
+                    }}
+                  >
+                    {isAuthenticated ? (
+                       <img src={avatarSrc} alt="Profile" className="qc-profile" />
+                    ) : (
+                      <FaUserCircle size={28} className="qc-profile-placeholder-icon" />
+                    )}
+                  </button>
+              </div>
+            </>
+          )}
+
+          {/* ---- Mobile Search Mode ---- */}
+          {isMobileSearchOpen && (
+            <div className="qc-mobile-search w-100 d-flex align-items-center">
+              <div className="flex-grow-1">
+                <SearchBox />
+              </div>
+
+              <button
+                className="btn-reset ms-2"
+                onClick={() => {
+                  setIsMobileSearchOpen(false);
+                  setActiveMenu(null);
+                  setSearchQuery("");
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
 
-        <Tooltip id="navbar-tooltip" place="bottom" />
+        {/* ---- Mobile Profile Panel ---- */}
+        {activeMenu === "profile" && (
+          <div 
+           ref={profileRef}
+           className="qc-mobile-profile-panel"
+          >
+            <div onClick={() => openProfile()}>My Profile</div>
+            <div onClick={() => openProfile({ edit: true })}>
+              Edit Profile
+            </div>
+            <div onClick={logout}>Logout</div>
+            <div onClick={toggleTheme}>
+              {theme === "light" ? "Dark Mode" : "Light Mode"}
+            </div>
+          </div>
+        )}
+
+        {/* ---- Row 2 Tabs ---- */}
+        <div className={`qc-mobile-tabs d-flex align-items-center justify-content-around
+        ${ activeMenu === "profile" ? "qc-tabs-disabled" : ""
+        }`}>
+
+          <NavLink to="/" className="qc-tab">
+            <FaHome />
+          </NavLink>
+
+          <NavLink to="/following" className="qc-tab">
+            <FaUserFriends />
+          </NavLink>
+
+          <NavLink to="/answers" className="qc-tab">
+            <FaPen />
+          </NavLink>
+
+          <NavLink to="/spaces" className="qc-tab">
+            <FaLayerGroup />
+          </NavLink>
+
+          <NavLink to="/notifications" className="qc-tab position-relative">
+            <FaBell />
+            {unreadCount > 0 && (
+              <span className="qc-badge">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </NavLink>
+
+        </div>
       </div>
-    </nav>
+
+    </div>
   );
 }

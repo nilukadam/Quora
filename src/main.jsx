@@ -12,6 +12,7 @@ import App from "./app/App";
  *  - index.css for app-specific overrides (keeps it last so it can override Global)
  */
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js"
 import "./styles/Global.css";
 import "./index.css";
 

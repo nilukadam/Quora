@@ -1,4 +1,5 @@
 // FILE: src/app/App.jsx
+
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
@@ -9,104 +10,120 @@ import AppRoutes from "../routes/AppRoutes";
 import QuestionModal from "../components/modals/QuestionModal";
 import ProfileModal from "../components/modals/ProfileModal";
 import ProfileNudge from "../components/modals/ProfileNudge";
+import SpaceModal from "../components/modals/SpaceModal";
+import LoginModal from "../components/modals/LoginModal";
+import AuthRequiredPopup from "../components/modals/AuthRequiredPopup";
+
 import {
   isProfileComplete,
   shouldShowProfileNudge,
   snoozeProfileNudge,
 } from "../components/util/isProfileCompleted";
-import SpaceModal from "../components/modals/SpaceModal";
-import LoginModal from "../components/modals/LoginModal";
-import AuthRequiredPopup from "../components/modals/AuthRequiredPopup";
 
 import { useFeed } from "../hooks/useFeed";
 import { useAuth } from "../hooks/useAuth";
-import ErrorBoundary from "../components/util/ErrorBoundry"; // keep as-is (file name in your repo)
+import ErrorBoundary from "../components/util/ErrorBoundry";
 
 /**
- * App — application root
+ * App.jsx
+ * ------------------------------------------------------------------
+ * Root orchestration layer of the application.
  *
  * Responsibilities:
- * - Mount Navbar, main routes and global modals
- * - Provide small gates for auth and profile-completion
- * - Wire feed actions (addQuestion/addSpace/addNotification) to UI events
- * - Show toasts on success/failure
+ * 1. Global modal state management
+ * 2. Auth & profile gating
+ * 3. Global event listeners (legacy compatibility)
+ * 4. Mobile sidebar drawer state
+ * 5. Route + Layout composition
  *
- * Notes:
- * - Uses local in-memory state to control modals & nudge flow.
- * - Auth gating will show an auth popup and store the last action to run after login.
+ * Note:
+ * Layout rendering is delegated to AppRoutes.
+ * This file controls behavior — not page UI structure.
  */
 
 export default function App() {
-  // --- modal / UI state ---
+
+  // ================= GLOBAL MODAL STATE =================
+
   const [questionOpen, setQuestionOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profileEditIntent, setProfileEditIntent] = useState(false);
   const [spaceOpen, setSpaceOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+
   const [spaceInitialName, setSpaceInitialName] = useState("");
-  const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [questionDraft, setQuestionDraft] = useState(null);
 
-  // Profile nudge / pending actions
+  // ================= AUTH FLOW STATE =================
+
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
   const [showNudge, setShowNudge] = useState(false);
-  const [pendingAction, setPendingAction] = useState(null); // function or null
+
+  // ================= MOBILE DRAWER STATE =================
+  // Lives at root so Navbar + HomePage can share control
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // ================= HOOKS =================
 
   const navigate = useNavigate();
   const { addQuestion, addSpace, addNotification } = useFeed();
   const { isAuthenticated, user, updateProfile, logout } = useAuth();
 
-  // --- Helper: require auth to run an action ---
+  // ======================================================
+  // AUTH & PROFILE GATING
+  // ======================================================
+
+  /**
+   * Ensures user is authenticated before executing action.
+   * If not authenticated → show auth popup.
+   */
   const requireAuth = useCallback(
     (fn) => {
       if (!isAuthenticated) {
-        // store the intended action and show auth prompt
-        setPendingAction(() => fn); 
+        setPendingAction(() => fn);
         setShowAuthPopup(true);
         toast("Please login to continue");
         return false;
       }
-      // run action immediately if authed
-      try {
-        fn?.();
-      } catch (err) {
-        // swallow (UI components should handle their own errors)
-        console.error(err);
-      }
+      fn?.();
       return true;
     },
     [isAuthenticated]
   );
 
-  // --- Helper: ensure profile completion before actions (if applicable) ---
+  /**
+   * Extends auth gating by also validating profile completion.
+   * Prevents content creation from incomplete profiles.
+   */
   const gateWithProfile = useCallback(
     (action) => {
-      if (!isAuthenticated) {
-        return requireAuth(action);
-      }
+      if (!isAuthenticated) return requireAuth(action);
 
       if (!isProfileComplete(user) && shouldShowProfileNudge()) {
-        // prompt the user to complete profile before proceeding
         setPendingAction(() => action);
         setShowNudge(true);
         return false;
       }
 
-      try {
-        action?.();
-      } catch (err) {
-        console.error(err);
-      }
+      action?.();
       return true;
     },
     [isAuthenticated, user, requireAuth]
   );
 
-  // --- Openers (use gateWithProfile where we want profile checks) ---
-  const openQuestion = useCallback(() => gateWithProfile(() => setQuestionOpen(true)), [gateWithProfile]);
+  // ======================================================
+  // ACTION HANDLERS
+  // ======================================================
+
+  const openQuestion = useCallback(
+    () => gateWithProfile(() => setQuestionOpen(true)),
+    [gateWithProfile]
+  );
 
   const handleProfileClick = useCallback(
     (edit = false) => {
-      // require auth; if authed, open profile modal
       requireAuth(() => {
         setProfileEditIntent(Boolean(edit));
         setProfileOpen(true);
@@ -116,23 +133,22 @@ export default function App() {
   );
 
   const handleOpenCreateSpace = useCallback(
-    (prefill = "") => gateWithProfile(() => {
-      setSpaceInitialName(prefill || "");
-      setSpaceOpen(true);
-    }),
+    (prefill = "") =>
+      gateWithProfile(() => {
+        setSpaceInitialName(prefill || "");
+        setSpaceOpen(true);
+      }),
     [gateWithProfile]
   );
 
   const handleTryPost = useCallback(
     (draft) => {
-      // store draft for modal; try open modal (requires auth & profile)
       setQuestionDraft(draft || null);
       return gateWithProfile(() => setQuestionOpen(true));
     },
     [gateWithProfile]
   );
 
-  // --- Submit handlers that call FeedContext actions ---
   const handleQuestionSubmit = useCallback(
     (payload) => {
       try {
@@ -144,8 +160,7 @@ export default function App() {
         toast.success("Published successfully");
         setQuestionDraft(null);
         setQuestionOpen(false);
-      } catch (err) {
-        console.error(err);
+      } catch {
         toast.error("Failed to publish");
       }
     },
@@ -156,38 +171,80 @@ export default function App() {
     (space) => {
       try {
         const created = addSpace(space);
+
         if (created?.name) {
-          addNotification({ text: `New space "${created.name}" created`, type: "space" });
+          addNotification({
+            text: `New space "${created.name}" created`,
+            type: "space",
+          });
           toast.success(`Space "${created.name}" created`);
           navigate(`/spaces?topic=${encodeURIComponent(created.name)}`);
         } else {
           navigate("/spaces");
         }
+
         setSpaceOpen(false);
-      } catch (err) {
-        console.error(err);
+      } catch {
         toast.error("Failed to create space");
       }
     },
     [addSpace, addNotification, navigate]
   );
 
-  // --- Global event listeners for inter-component communication ---
+  /**
+   * Executes any pending action after successful login.
+   */
+  const handleLoginSuccess = useCallback(() => {
+    setLoginOpen(false);
+
+    setTimeout(() => {
+      setPendingAction((fn) => {
+        if (typeof fn === "function") fn();
+        return null;
+      });
+    }, 0);
+
+    setShowAuthPopup(false);
+    toast.success("Welcome back!");
+
+    if (!isProfileComplete(user) && shouldShowProfileNudge()) {
+      setShowNudge(true);
+    }
+  }, [user]);
+
+  // ======================================================
+  // GLOBAL EVENT BRIDGE (Legacy Compatibility Layer)
+  // ======================================================
+
+  /**
+   * Keeps older components functional that still dispatch
+   * window-based CustomEvents.
+   *
+   * This allows gradual migration to prop-driven architecture.
+   */
   useEffect(() => {
-    const onOpenQuestion = () => gateWithProfile(() => setQuestionOpen(true));
-    const onOpenSpace = () => gateWithProfile(() => setSpaceOpen(true));
+    const onOpenQuestion = () =>
+      gateWithProfile(() => setQuestionOpen(true));
+
+    const onOpenSpace = (e) =>
+      gateWithProfile(() => {
+        const prefill = e?.detail?.prefill || "";
+        setSpaceInitialName(prefill);
+        setSpaceOpen(true);
+      });
+
     const onOpenLogin = () => setLoginOpen(true);
+
     const onOpenProfile = (e) => {
       const wantsEdit = !!(e && e.detail && e.detail.edit);
       handleProfileClick(wantsEdit);
     };
+
     const onLogout = () => {
       try {
         logout();
         toast.success("Logged out");
-      } catch (error) {
-        // make sure we reference the same identifier
-        console.error(error);
+      } catch {
         toast.error("Failed to logout");
       }
     };
@@ -207,96 +264,44 @@ export default function App() {
     };
   }, [gateWithProfile, handleProfileClick, logout]);
 
-  // --- After successful login: run stored pending action (if any) and show nudge if needed ---
-  const handleLoginSuccess = useCallback(() => {
-    setLoginOpen(false);
-    // run stored pending action (if present)
-    setTimeout(() => {
-      setPendingAction((fn) => {
-        if (typeof fn === "function") {
-          try {
-            fn();
-          } catch (err) {
-            console.error(err);
-          }
-        }
-        return null;
-      });
-    }, 0);
+  // ======================================================
+  // RENDER
+  // ======================================================
 
-    setShowAuthPopup(false);
-    toast.success("Welcome back!");
-
-    // If profile incomplete and not snoozed — show nudge
-    if (!isProfileComplete(user) && shouldShowProfileNudge()) {
-      setShowNudge(true);
-    }
-  }, [user]);
-
-  // --- Profile nudge handlers ---
-  const onNudgeUpdateNow = useCallback(() => {
-    setShowNudge(false);
-    setProfileEditIntent(true);
-    setProfileOpen(true);
-  }, []);
-
-  const onNudgeSkip = useCallback(
-    (shouldProceed = true) => {
-      snoozeProfileNudge(7); // don't show nudge for 7 days
-      setShowNudge(false);
-
-      if (shouldProceed && typeof pendingAction === "function") {
-        const fn = pendingAction;
-        setPendingAction(null);
-        try {
-          fn();
-        } catch (err) {
-          console.error(err);
-        }
-      } else {
-        setPendingAction(null);
-      }
-    },
-    [pendingAction]
-  );
-
-  // --- Render ---
   return (
     <>
       <Navbar
         onAddQuestionClick={openQuestion}
         onProfileClick={(opts) => {
-          const edit = opts === true || (opts && opts.edit === true);
+          const edit =
+            opts === true || (opts && opts.edit === true);
           handleProfileClick(edit);
         }}
-        onCreateSpace={(name) => handleOpenCreateSpace(name)}
+        onCreateSpace={handleOpenCreateSpace}
         onLoginClick={() => setLoginOpen(true)}
+        onToggleSidebar={() => setIsSidebarOpen(true)}
       />
 
-      {/* Global Toaster */}
-      <Toaster position="top-right"
-      toastOptions={{
-        duration: 1200, //1.2 second
-      }} />
+      <Toaster position="top-right" toastOptions={{ duration: 1200 }} />
 
-      {/* Main content: container wrapper */}
-      <main className="container my-4 app-main" style={{ minHeight: "70vh", paddingTop: "72px" }}>
+      <main
+        className="container my-4 app-main"
+        style={{ minHeight: "70vh", paddingTop: "90px" }}
+      >
         <ErrorBoundary>
           <Suspense fallback={<div className="text-center my-5">Loading...</div>}>
-            <AppRoutes  
+            <AppRoutes
               onAskClick={openQuestion}
-              onTryPost={(draft) => handleTryPost(draft)}
-              onCreateSpace={(name) => handleOpenCreateSpace(name)}
-              onProfileClick={(opts) => {
-                const edit = opts === true || (opts && opts.edit === true);
-                handleProfileClick(edit);
-              }}
+              onTryPost={handleTryPost}
+              onCreateSpace={handleOpenCreateSpace}
+              onProfileClick={handleProfileClick}
+              isSidebarOpen={isSidebarOpen}
+              onCloseSidebar={() => setIsSidebarOpen(false)}
             />
           </Suspense>
         </ErrorBoundary>
       </main>
 
-      {/* Modals */}
       <QuestionModal
         isOpen={questionOpen}
         onClose={() => {
@@ -341,7 +346,7 @@ export default function App() {
           setLoginOpen(false);
           setPendingAction(null);
         }}
-        onSuccess={() => handleLoginSuccess()}
+        onSuccess={handleLoginSuccess}
       />
 
       <AuthRequiredPopup
@@ -355,9 +360,13 @@ export default function App() {
 
       <ProfileNudge
         show={showNudge}
-        onClose={() => onNudgeSkip(false)}
-        onSkip={() => onNudgeSkip(true)}
-        onUpdateNow={onNudgeUpdateNow}
+        onClose={() => snoozeProfileNudge(7)}
+        onSkip={() => snoozeProfileNudge(7)}
+        onUpdateNow={() => {
+          setShowNudge(false);
+          setProfileEditIntent(true);
+          setProfileOpen(true);
+        }}
       />
     </>
   );

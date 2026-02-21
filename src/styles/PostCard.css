@@ -2,22 +2,26 @@
    Post / Answer Card
    =========================== */
 
-/* ---------- Card wrapper ---------- */
+
+/* ---------- Card Wrapper ---------- */
+
 .post-card {
   background-color: var(--bs-card-bg);
   color: var(--bs-body-color);
   border: 1px solid var(--bs-border-color);
   border-radius: 12px;
-  margin-bottom: 1.25rem; /* softened */
+  margin-bottom: 1.25rem;
 }
 
+
 /* ---------- Header ---------- */
+
 .post-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 0.85rem 1rem; 
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--bs-border-color);
 }
 
@@ -30,7 +34,8 @@
 }
 
 
-/* avatar */
+/* Avatar */
+
 .post-header img,
 .post-avatar {
   width: 44px;
@@ -42,7 +47,9 @@
   flex-shrink: 0;
 }
 
-/* author */
+
+/* Author */
+
 .post-header .author h6 {
   margin: 0;
   font-size: 1rem;
@@ -52,6 +59,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .post-header .author h6:hover {
   text-decoration: underline;
   cursor: pointer;
@@ -59,23 +67,24 @@
 
 .post-header .author .meta {
   font-size: 0.78rem;
-  color: var(--bs-muted, #6c757d); /* secondary, calm */
+  color: var(--bs-muted, #6c757d);
 }
 
+
 /* ---------- Body ---------- */
+
 .post-body {
   padding: 0.9rem 1rem;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
- 
+
 .post-text-inner {
   position: relative;
-  z-index: 2; /* keeps text + read more above image */
+  z-index: 2;
 }
 
-/* question */
 .post-body h5 {
   margin: 0 0 0.45rem;
   font-size: 1.05rem;
@@ -83,13 +92,11 @@
   color: var(--bs-body-color);
 }
 
-/* text wrapper */
 .post-text {
   position: relative;
   scroll-margin-top: 12px;
 }
 
-/* content */
 .post-content {
   font-size: 0.95rem;
   line-height: 1.6;
@@ -99,7 +106,9 @@
   margin-bottom: 0;
 }
 
-/* read more */
+
+/* Read More */
+
 .post-readmore {
   display: inline-block;
   margin-top: 0.35rem;
@@ -110,6 +119,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .post-readmore:hover {
@@ -120,7 +130,9 @@
   opacity: 0.7;
 }
 
-/* media */
+
+/* Media */
+
 .post-body img {
   display: block;
   width: 100%;
@@ -130,7 +142,9 @@
   margin-top: 1rem;
 }
 
+
 /* ---------- Footer ---------- */
+
 .post-footer {
   display: flex;
   justify-content: space-between;
@@ -140,7 +154,9 @@
   border-top: 1px solid var(--bs-border-color);
 }
 
-/* actions */
+
+/* Actions */
+
 .post-footer .actions {
   display: flex;
   gap: 8px;
@@ -157,6 +173,11 @@
   background: transparent;
   border: 1px solid transparent;
   color: var(--bs-body-color);
+  transition: background-color 0.15s ease;
+}
+
+.post-footer .actions button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .post-footer .actions button:active {
@@ -164,12 +185,8 @@
 }
 
 
-/* hover lift REMOVED – calm interaction */
-.post-footer .actions button:hover {
-  background-color: rgba(0,0,0,0.04);
-}
+/* Vote States */
 
-/* vote states (kept, but not louder) */
 .btn-vote-up.active {
   background-color: var(--bs-success);
   color: #fff;
@@ -180,17 +197,21 @@
   color: #fff;
 }
 
-/* badge */
+
+/* Badge */
+
 .post-type-badge {
   font-size: 0.8rem;
   padding: 6px 8px;
   border-radius: 999px;
-  background-color: rgba(214,40,57,0.08);
+  background-color: rgba(214, 40, 57, 0.08);
   color: var(--bs-danger, #d62839);
   font-weight: 600;
 }
 
+
 /* ---------- Comments ---------- */
+
 .post-comments {
   padding: 1rem 1rem 1.1rem;
   border-top: 1px solid var(--bs-border-color);
@@ -201,7 +222,7 @@
   gap: 8px;
   margin-bottom: 0.5rem;
 }
- 
+
 .post-comments img {
   width: 34px;
   height: 34px;
@@ -220,32 +241,61 @@
   line-height: 1.4;
 }
 
+
 /* ---------- Accessibility ---------- */
+
 .post-card :is(button, a):focus-visible {
   outline: 2px solid #d62839;
   outline-offset: 2px;
   border-radius: 8px;
 }
 
-/* ---------- Responsive ---------- */
+
+/* ===========================
+   Mobile Refinement
+   =========================== */
+
 @media (max-width: 768px) {
+
+  .post-card {
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-bottom: var(--mobile-section-gap);
+  }
+
   .post-header,
   .post-body,
   .post-footer {
-    padding: 0.6rem 0.75rem;
+    padding: var(--mobile-card-padding);
   }
 
   .post-header img {
     width: 40px;
     height: 40px;
   }
-}
 
-.post-readmore{
-  transition: color 0.15s ease,
-}
+  .post-footer .actions {
+    gap: 12px;
+  }
 
-.post-footer .actions button {
-  background-color: 0.15s ease;
+  .post-footer .actions button {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+
+  .post-body h5 {
+    font-size: calc(1.05rem * var(--mobile-text-scale));
+    line-height: 1.4;
+  }
+
+  .post-content {
+    font-size: calc(0.95rem * var(--mobile-text-scale));
+    line-height: 1.6;
+  }
+
+  .post-body img {
+    margin-top: 12px;
+    margin-bottom: 4px;
+    border-radius: 12px;
+  }
 }
- 

@@ -15,23 +15,22 @@ import ProfilePage from "../features/profiles/ProfilePage";
  * ---------------------------------------------------------
  * Central routing component for the entire app.
  *
- * It defines all top-level routes and passes handler props
- * down to pages that need them (especially HomePage).
- *
  * Props injected by <App />:
- *  - onAskClick: open Ask modal
- *  - onTryPost: open Question modal with draft
- *  - onCreateSpace: open Create Space modal
- *  - onProfileClick: open Profile modal
- *
- * Note: Using <Navigate> for catch-all ensures any unknown
- * path redirects gracefully to home.
+ *  - onAskClick
+ *  - onTryPost
+ *  - onCreateSpace
+ *  - onProfileClick
+ *  - isSidebarOpen       
+ *  - onCloseSidebar      
  */
+
 export default function AppRoutes({
   onAskClick,
   onTryPost,
   onCreateSpace,
   onProfileClick,
+  isSidebarOpen,      
+  onCloseSidebar,     
 }) {
   return (
     <Routes>
@@ -44,14 +43,16 @@ export default function AppRoutes({
             onTryPost={onTryPost}
             onCreateSpace={onCreateSpace}
             onProfileClick={onProfileClick}
+            isSidebarOpen={isSidebarOpen}
+            onCloseSidebar={onCloseSidebar}
           />
         }
       />
 
-      {/* === Answers (search / Q&A results) === */}
+      {/* === Answers === */}
       <Route path="/answers" element={<AnswersPage />} />
 
-      {/* === Following (feed of followed authors/spaces) === */}
+      {/* === Following === */}
       <Route path="/following" element={<FollowingPage />} />
 
       {/* === Spaces === */}
@@ -61,7 +62,7 @@ export default function AppRoutes({
       {/* === Notifications === */}
       <Route path="/notifications" element={<NotificationsPage />} />
 
-      {/* === Profile (current user view) === */}
+      {/* === Profile === */}
       <Route path="/profile" element={<ProfilePage />} />
 
       {/* === Catch-all redirect === */}

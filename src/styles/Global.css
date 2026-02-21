@@ -1,5 +1,5 @@
 /* ===========================
-   Skeleton loaders (unchanged)
+   Skeleton Loaders
    =========================== */
 
 .skeleton {
@@ -20,13 +20,14 @@
   border-radius: 999px;
 }
 
+
 /* ===========================
-   Global calm utilities
+   Global Calm Utilities
    =========================== */
 
-/* Quiet icons globally (react-icons safe) */
+/* Quiet icons globally (safe for react-icons) */
 svg {
-  color: currentColor; /* tertiary tone */
+  color: currentColor;
 }
 
 /* Subtle horizontal rules */
@@ -34,14 +35,28 @@ hr {
   border-color: var(--bs-border-color);
 }
 
-/* Neutral links by default (context decides emphasis) */
+/* Neutral links (context controls emphasis) */
 a {
   color: inherit;
   text-decoration: underline;
 }
 
-/* Utility widths (unchanged) */
+/* Utility widths */
 .w-25 { width: 25%; }
 .w-50 { width: 50%; }
 .w-75 { width: 75%; }
 .w-100 { width: 100%; }
+
+
+/* ===========================
+   Mobile Spacing System
+   (Foundation Layer)
+   =========================== */
+
+@media (max-width: 768px) {
+  :root {
+    --mobile-section-gap: 16px;
+    --mobile-card-padding: 14px;
+    --mobile-text-scale: 0.95;
+  }
+}

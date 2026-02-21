@@ -26,6 +26,8 @@ export default function HomePage({
   onTryPost,
   onCreateSpace,
   onProfileClick,
+  isSidebarOpen,
+  onCloseSidebar,
 }) {
   // --- Legacy events (kept for backwards compatibility) ---
   const legacyOpenQuestion = () => window.dispatchEvent(new CustomEvent("qc:openQuestion"));
@@ -45,7 +47,7 @@ export default function HomePage({
           // legacy opens the question modal (no draft support in legacy path)
           legacyOpenQuestion();
         };
-
+ 
   // createSpace handler may be passed a prefill name
   const createSpaceHandler =
     typeof onCreateSpace === "function"
@@ -60,33 +62,63 @@ export default function HomePage({
       : (opts = {}) => legacyOpenProfile(opts);
 
   return (
+  <>
+    {/* ===== EXISTING LAYOUT (UNCHANGED) ===== */}
     <div className="container homepage-container">
       <div className="row g-4">
-        {/* LEFT: sticky column (spaces list scrolls; small footer pinned below) */}
+
         <aside className="col-lg-3 d-none d-lg-block homepage-sidebar">
           <div className="sidebar-sticky">
             <div className="spaces-scroll">
-              {/* FilterSidebar should call onCreateSpaceClick when user wants to create a space */}
-              <FilterSidebar onCreateSpaceClick={createSpaceHandler} onSpaceClick={() => {}} />
+              <FilterSidebar
+                onCreateSpaceClick={(prefill) => {
+                  createSpaceHandler(prefill)
+                  onCloseSidebar();
+                }}
+                onSpaceClick={() => {}}
+              />
             </div>
-
-            {/* small footer under spaces */}
             <div className="sidebar-footer-wrapper">
               <SidebarFooter />
             </div>
           </div>
         </aside>
 
-        {/* CENTER: Ask box + Feed */}
         <section className="col-12 col-lg-6 homepage-main">
-          <AskBox onAskClick={askHandler} onTryPost={postHandler} onProfileClick={profileHandler} />
-          {/* pass handlers to Feed in case Feed/PostCard uses them (safe to pass even if unused) */}
-          <Feed onTryPost={postHandler} onCreateSpace={createSpaceHandler} onProfileClick={profileHandler} />
+          <AskBox
+            onAskClick={askHandler}
+            onTryPost={postHandler}
+            onProfileClick={profileHandler}
+          />
+          <Feed
+            onTryPost={postHandler}
+            onCreateSpace={createSpaceHandler}
+            onProfileClick={profileHandler}
+          />
         </section>
 
-        {/* RIGHT (optional widgets) */}
-        <aside className="col-lg-3 d-none d-lg-block">{/* future widgets */}</aside>
+        <aside className="col-lg-3 d-none d-lg-block" />
       </div>
     </div>
-  );
+    
+
+    {/* ===== MOBILE DRAWER LAYER ===== */}
+    {isSidebarOpen && (
+      <div
+        className="mobile-sidebar-overlay"
+        onClick={onCloseSidebar}
+      >
+        <div
+          className="mobile-sidebar-drawer"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <FilterSidebar
+            onCreateSpaceClick={createSpaceHandler}
+            onSpaceClick={() => {}}
+          />
+        </div>
+      </div>
+    )}
+  </>
+);
 }

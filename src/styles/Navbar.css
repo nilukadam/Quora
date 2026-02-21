@@ -1,232 +1,307 @@
+/* ================= Z-INDEX SYSTEM ================= */
+
+:root {
+  --navbar-height-desktop: 70px;
+  --navbar-height-mobile-top: 56px;
+  --navbar-height-mobile-tabs: 48px;
+
+  --z-navbar: 1000;
+  --z-dropdown: 1100;
+  --z-overlay: 1100;
+  --z-modal: 1200;
+}
+
+
+/* ================= DESKTOP NAVBAR ================= */
+
+.qc-navbar {
+  height: var(--navbar-height-desktop);
+  background-color: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  z-index: var(--z-navbar);
+}
+
+.qc-navbar .container-fluid {
+  gap: 20px;
+}
+
+.qc-link {
+  font-size: 20px;
+  padding: 10px;
+  color: #495057;
+  border-bottom: 3px solid transparent; /* Prevent layout shift */
+}
+
+.qc-link.active {
+  color: #d62839;
+  border-bottom-color: #d62839;
+}
+.qc-logo {
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #b92b27;
+  letter-spacing: -0.5px;
+}
+
+.qc-logo:hover {
+  color: #a61f1b;
+}
+
+.qc-tab .qc-badge {
+  top: 2px;
+  right: 2px;
+}
+
+.qc-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 260px; /* Locked width to prevent flex shift */
+}
+
+.qc-search {
+  width: 100%;
+  padding: 6px 28px;
+  border-radius: 6px;
+  border: 1px solid var(--bs-border-color);
+}
+
+.qc-search-icon {
+  position: absolute;
+  left: 8px;
+  font-size: 14px;
+  color: #999;
+}
+
+.qc-add-btn {
+  font-size: 14px;
+}
+
+.qc-profile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.qc-profile-placeholder-icon {
+  width: 36px;
+  height: 36px;
+  color: #999;
+}
+
+/* ================= SEARCH SUGGESTIONS ================= */
+
+.qc-suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 6px 0;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: var(--z-dropdown);
+}
+
+.qc-suggestion-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.qc-suggestion-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+.qc-search-wrapper {
+  position: relative;
+  width: 260px;
+}
+
+
+/* ================= DROPDOWNS ================= */
+
+.qc-suggestions,
+.qc-profile-dropdown,
+.qc-mobile-profile-panel {
+  z-index: var(--z-dropdown);
+}
+/* ================= DESKTOP PROFILE DROPDOWN ================= */
+
+.qc-profile-wrapper {
+  position: relative;
+}
+
+.qc-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 10px;
+  padding: 8px 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--z-dropdown);
+}
+
+.qc-profile-dropdown div {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.qc-profile-dropdown div:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+
+/* ================= MOBILE NAVBAR ================= */
+
+.qc-mobile-top {
+  position: fixed;
+  padding: 0 16px;
+  top: 0;
+  width: 100%;
+  height: var(--navbar-height-mobile-top);
+  background-color: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  z-index: var(--z-navbar);
+}
+
+.qc-mobile-tabs {
+  position: fixed;
+  top: var(--navbar-height-mobile-top);
+  width: 100%;
+  height: var(--navbar-height-mobile-tabs);
+  background-color: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  z-index: var(--z-navbar);
+}
+
+.qc-mobile-tabs {
+  pointer-events: auto;
+}
+
+.qc-tab {
+  font-size: 18px;
+  padding: 8px;
+  color: #495057;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid transparent; /* Prevent layout shift */
+}
+
+.qc-tab.active {
+  color: #d62839;
+  border-bottom-color: #d62839;
+}
+
+.qc-mobile-add {
+  color: #d62839;
+}
+
+.qc-mobile-search input {
+  border-radius: 6px;
+}
+.qc-mobile-search .qc-search-wrapper {
+  width: 100%;
+}
+
+/* ================= MOBILE PROFILE PANEL ================= */
+
+.qc-mobile-profile-panel {
+  position: fixed;
+  top: var(--navbar-height-mobile-top);
+  left: 0;
+  width: 100%;
+  background-color: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: var(--z-dropdown);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+.qc-mobile-profile-panel div {
+  padding: 10px 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.qc-mobile-profile-panel div:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.qc-tabs-disabled {
+  pointer-events: none;
+}
+
+
+
+/* ================= CONTENT OFFSET ================= */
+
+.app-main {
+  padding-top: var(--navbar-height-desktop);
+}
+
+@media (max-width: 991.98px) {
+  .app-main {
+    padding-top: calc(
+      var(--navbar-height-mobile-top) +
+      var(--navbar-height-mobile-tabs)
+    );
+  }
+}
+
 /* ===========================
-   Navbar
+   Mobile Top Icon Calibration
    =========================== */
 
-   .qc-navbar {
-    height: 70px;
-    font-size: 15px;
-    z-index: 1050;
-    background-color: var(--bs-body-bg);
-    color: var(--bs-body-color);
-    border-bottom: 1px solid var(--bs-border-color);
-  }
-  
-  /* ===========================
-     Logo
-     =========================== */
-  
-  .qc-logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #eb3749;
-    margin-top: 4px;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-  }
-  
-  .qc-logo:hover {
-    color: #c92a3a;
-  }
-  
-  /* ===========================
-     Nav links
-     =========================== */
-  
-  .qc-links .qc-link {
-    display: flex;
+@media (max-width: 991.98px) {
+
+  .qc-mobile-top .btn-reset {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    font-size: 22px;
-    color: #495057;
-    cursor: pointer;
-  }
-  
-  .qc-link:hover {
-    color: #d62839;
-  }
-  
-  .qc-link.active {
-    color: #d62839;
-    border-bottom: 2px solid #d62839;
-  }
-  .qc-links .qc-link:active {
-  background-color: rgba(0, 0, 0, 0.06);
-  }
-
-  /* ===========================
-     Search
-     =========================== */
-  
-  .qc-search-wrapper {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-left: 10px;
-  }
-  
-  .qc-search {
-    width: 260px;
-    padding: 7px 36px 7px 28px;
-    font-size: 14px;
-    border-radius: 6px;
-    background-color: var(--bs-body-bg);
-    color: var(--bs-body-color);
-    border: 1px solid var(--bs-border-color);
-  }
-  
-  .qc-search:focus {
-    outline: none;
-    border-color: #d62839;
-  }
-  
-  .qc-search-icon {
-    position: absolute;
-    left: 8px;
-    font-size: 16px;
-    color: #adb5bd;
-  }
-  
-  .qc-search-btn {
-    margin-left: 8px;
-    padding: 6px 12px;
-    font-size: 14px;
-    border-radius: 6px;
-    background-color: #d62839;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .qc-search-btn:hover {
-    background-color: #a61c2d;
-  }
-  
-  /* ===========================
-     Search suggestions
-     =========================== */
-  
-  .qc-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 260px;
-    overflow-y: auto;
-    background-color: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: 6px;
-    z-index: 2000;
-  }
-  
-  .qc-suggestion-item {
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .qc-suggestion-item:hover {
-    background-color: #f7f7f7;
-  }
-  
-  /* ===========================
-     Add Question
-     =========================== */
-  
-  .qc-add-btn {
-    margin-left: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 6px;
-  }
-  
-  /* ===========================
-     Profile
-     =========================== */
-  
-  .qc-profile-wrapper {
-    position: relative;
-    z-index: 1050;
-  }
-  
-  .qc-profile-btn {
-    width: 36px;
-    height: 36px;
-    padding: 0;
     border-radius: 50%;
     background: transparent;
-    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: background-color 0.15s ease;
   }
-  
-  .qc-profile {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: var(--bs-card-bg, #f1f3f5);
-    border: 1px solid var(--bs-border-color);
+
+  .qc-mobile-top .btn-reset:hover {
+    background-color: rgba(0, 0, 0, 0.05);
   }
-  
-  .qc-profile-btn:hover .qc-profile {
-    border-color: #d62839;
+
+  .qc-mobile-top .btn-reset:active {
+    background-color: rgba(0, 0, 0, 0.08);
   }
-  
-  .qc-profile-btn:focus-visible {
-    outline: 2px solid #d62839;
-    outline-offset: 2px;
+
+  .qc-mobile-top .btn-reset svg {
+    font-size: 18px;
   }
-  
-  /* ===========================
-     Profile dropdown
-     =========================== */
-  
-  .qc-profile-dropdown {
-    position: absolute;
-    top: 110%;
-    right: 0;
-    margin-top: 6px;
-    min-width: 160px;
-    background-color: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: 6px;
-    z-index: 2000;
+
+  .qc-mobile-top .qc-profile {
+    width: 32px;
+    height: 32px;
   }
-  
-  .qc-profile-dropdown div {
-    padding: 10px 16px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .qc-profile-dropdown div:hover {
-    background-color: #f5f5f5;
-  }
-  
-  /* ===========================
-     Scrollbar
-     =========================== */
-  
-  .qc-suggestions::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .qc-suggestions::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    border-radius: 4px;
-  }
-  
-  /* ===========================
-     Smooth hover
-     =========================== */
-  
-  .qc-link,
-  .qc-search,
-  .qc-search-btn,
-  .qc-profile-btn {
-    transition: color 0.15s ease,
-                border-color 0.15s ease,
-                background-color 0.15s ease;
-  }
-  
+
+}
