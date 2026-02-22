@@ -1,66 +1,228 @@
+# 🚀 Structured Q&A Frontend System
 
+> A production-deployed, architecture-first React SPA demonstrating how frontend systems should behave in real-world environments — not just how they look.
 
-## Product-Focused Q&A Frontend Application
+<p align="left">
+  <img src="https://img.shields.io/badge/Build-Passing-success" />
+  <img src="https://img.shields.io/badge/Deployed-Vercel-black" />
+  <img src="https://img.shields.io/badge/React-18-blue" />
+  <img src="https://img.shields.io/badge/Vite-Production-purple" />
+  <img src="https://img.shields.io/badge/License-MIT-green" />
+</p>
 
+🔗 **Live Demo:**  
+https://structured-qna-frontend.vercel.app  
 
-## Project Overview
+---
 
-This project is a frontend-focused, information and interaction-driven product inspired by Q&A platforms. It was built to demonstrate how user-facing features should behave in a real product—not just how they appear. The emphasis is on clarity, predictable behavior, and honest interaction feedback, ensuring that every user action produces an understandable outcome. Rather than maximizing feature count, the project prioritizes consistent behavior, clear authentication boundaries, and deliberate scope control, reflecting real-world frontend decision-making and restraint.
+## 📑 Table of Contents
 
+- [Why This Project Exists](#-why-this-project-exists)
+- [Core System Principles](#-core-system-principles)
+- [Time to First Run](#-time-to-first-run)
+- [Feature Overview](#-feature-overview)
+- [Architecture Design](#-architecture-design)
+- [Product & UX Philosophy](#-product--ux-philosophy)
+- [Tech Stack](#-tech-stack)
+- [Production Verification](#-production-verification)
+- [What This Project Demonstrates](#-what-this-project-demonstrates)
+- [Future Evolution](#-future-evolution)
+- [License](#-license)
 
-## Key Features
+---
 
-Content-first feed with consistent behavior — Designed for reading and scanning, with stable layouts and predictable interaction patterns.
+## 🎯 Why This Project Exists
 
-Clear and honest authentication boundaries — Content is accessible by default, while restricted actions are transparently communicated.
+Most frontend “Q&A clones” focus on visual similarity.
 
-Predictable interaction feedback — Every user action receives immediate, understandable feedback.
+This project focuses on something more important:
 
-System-wide state consistency — User actions are reflected coherently across relevant views, avoiding conflicting states.
+**Behavioral correctness, architectural clarity, and production stability.**
 
-Deliberate scope restraint — Features are intentionally limited to ensure correctness and reliability over quantity.
+### The Core Problem
 
+Frontend applications often:
 
-## Technical Stack
+- Break on hard refresh due to SPA routing misconfiguration  
+- Blur authentication boundaries  
+- Allow misleading UI affordances  
+- Collapse under unclear component ownership  
+- Ship without real production validation  
 
-React — Chosen for its component-based model, enabling clear separation between layout, interaction, and product behavior without unnecessary complexity.
+This project exists to demonstrate how to prevent those failures.
 
-React Router — Used to define explicit page boundaries and preserve user context during navigation.
+It models:
 
-Bootstrap — Selected to ensure layout consistency and accessibility while keeping focus on interaction behavior rather than custom styling overhead.
+- Predictable UI behavior  
+- Clear authentication responsibility  
+- Stable routing under real deployment conditions  
+- Disciplined scope control  
+- Component-driven architecture  
 
-Custom CSS — Applied selectively for layout refinement and interaction clarity without fighting the framework.
+This is not a UI clone.  
+It is a frontend system built with production intent.
 
+---
 
+## 🧠 Core System Principles
 
-## Product & UX Decisions
+### 1️⃣ Predictability Over Novelty  
+Every interaction produces clear, immediate, understandable feedback.
 
-Authentication as an honesty boundary — Auth exists only to enforce clear restrictions and avoid implying unavailable actions.
+### 2️⃣ Authentication as a Boundary  
+Auth defines action permissions clearly and honestly.
 
-Feed consistency over optimization — A uniform structure reduces cognitive load and supports predictable interaction.
+### 3️⃣ Stable Routing as a First-Class Concern  
+SPA routing is production-configured with rewrite rules.  
+Hard refresh on nested routes is verified.
 
-Notifications as trust signals — Notifications confirm system actions rather than drive engagement.
+### 4️⃣ Deliberate Scope Restraint  
+Features were intentionally limited to ensure correctness and defensibility.
 
-Avoidance of unnecessary motion — Animations were excluded where they did not improve clarity or correctness.
+### 5️⃣ “Don’t Lie with UI” Principle  
+Every visible action reflects a real, supported behavior.
 
-“Don’t lie with UI” principle — Every visible affordance reflects a real, supported action.
+---
 
+## ⚡ Time to First Run
 
+Run locally in under a minute:
 
-## What This Project Demonstrates
+```bash
+git clone https://github.com/nilukadam/structured-qna-frontend.git
+cd structured-qna-frontend
+npm install && npm run dev
+```
 
-Decision-making restraint — Scope and complexity were intentionally controlled to ensure completeness and defensibility.
+Open:
 
-Product-level judgment in frontend work — Correctness and clarity were prioritized over visual novelty or feature volume.
+```
+http://localhost:5173
+```
 
-UX empathy grounded in behavior — Interfaces acknowledge user actions clearly and avoid misleading cues.
+Production build:
 
-Clear ownership of trade-offs — Decisions about what not to build were treated as deliberate and intentional.
+```bash
+npm run build
+```
 
+---
 
+## 📦 Feature Overview
 
-## Future Scope
+- Content-first feed layout optimized for scanning  
+- Expandable answer handling with predictable state behavior  
+- Auth-aware action boundaries  
+- Structured notification system as confirmation signals  
+- Responsive layout discipline (Bootstrap grid + scoped refinement)  
+- System-wide state consistency across views  
+- Production-stable routing behavior  
 
-Richer content discovery controls — Enhanced filtering or sorting within existing views to support deeper exploration.
+---
 
-Expanded notification refinement — More granular notification states while preserving their role as confirmation signals.
+## 🏗 Architecture Design
+
+The application follows a layered, responsibility-driven structure:
+
+```
+src/
+│
+├── layout/            → Global structural containers
+├── components/
+│   ├── domain/        → Feed, Sidebar, Notifications, Spaces
+│   ├── ui/            → Buttons, Cards, Skeletons
+│   └── modals/
+├── pages/             → Route-level boundaries
+├── router/            → Navigation configuration
+└── styles/            → Scoped styling strategy
+```
+
+### Architectural Characteristics
+
+- Clear separation between layout, domain logic, and reusable UI  
+- Component ownership boundaries defined explicitly  
+- Routing layer isolated from view logic  
+- Styling layered: Bootstrap for structure, scoped CSS for refinement  
+
+This structure enables maintainability and predictable evolution.
+
+---
+
+## 🎨 Product & UX Philosophy
+
+### Authentication as an Honesty Mechanism  
+Restricted actions are clearly communicated.  
+The UI never implies capabilities that are unavailable.
+
+### Notifications as Trust Signals  
+Notifications confirm system events rather than manipulate engagement.
+
+### Consistency Over Animation  
+Motion is avoided unless it improves clarity.
+
+### Feed Design for Cognitive Ease  
+Uniform structure reduces scanning friction and improves readability.
+
+---
+
+## 🛠 Tech Stack
+
+- **React 18** — Component-driven UI architecture  
+- **Vite** — Fast, production-optimized bundling  
+- **React Router** — Explicit page boundaries and navigation control  
+- **Bootstrap** — Layout consistency and accessibility baseline  
+- **Scoped CSS** — Controlled refinement layer  
+- **Vercel** — Production deployment with rewrite configuration  
+
+---
+
+## 🚀 Production Verification
+
+The application has been validated in a real deployment environment:
+
+- Production build verified  
+- Case-sensitive file naming corrected (Linux compatibility)  
+- SPA routing rewrites configured  
+- Hard refresh tested on nested routes  
+- No console errors in production  
+- Stable navigation across all pages  
+
+This is not a “works locally” demo.  
+It is deployment-tested.
+
+---
+
+## 🧪 What This Project Demonstrates
+
+This repository reflects:
+
+- Frontend architectural discipline  
+- Production deployment awareness  
+- Routing edge-case handling  
+- Controlled scope execution  
+- UX decision ownership  
+- Stability-first engineering mindset  
+
+It demonstrates how a frontend engineer approaches systems thinking, not just styling.
+
+---
+
+## 🔮 Future Evolution
+
+Potential expansions while preserving system discipline:
+
+- Enhanced content discovery within existing structural boundaries  
+- Refined notification state granularity  
+- Progressive enhancement patterns  
+
+Any evolution will maintain:
+
+- Architectural clarity  
+- Honest UI principles  
+- Production stability  
+
+---
+
+## 📄 License
+
+MIT License.
